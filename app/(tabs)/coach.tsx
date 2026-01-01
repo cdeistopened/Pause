@@ -82,12 +82,15 @@ export default function CoachScreen() {
   }, [addIntention]);
 
   const sendMessage = async (text: string) => {
-    if (!text.trim() || isLoading) return;
+    // Input validation: trim whitespace, max 1000 characters
+    const sanitizedText = text.trim().slice(0, 1000);
+    if (!sanitizedText || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: text.trim() };
+    const userMessage: Message = { role: 'user', content: sanitizedText };
     setMessages(prev => [...prev, userMessage]);
     setInputText('');
     setIsLoading(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
     try {
       const response = await getCoachResponse(
@@ -146,6 +149,8 @@ export default function CoachScreen() {
           <Pressable
             className="flex-row items-center bg-surface-dark px-3 py-1.5 rounded-full gap-1.5"
             onPress={toggleMode}
+            accessibilityLabel={`Switch to ${mode === 'voice' ? 'chat' : 'voice'} mode`}
+            accessibilityRole="button"
           >
             {mode === 'voice' ? (
               <>
@@ -226,6 +231,8 @@ export default function CoachScreen() {
                 }`}
                 onPressIn={() => setIsRecording(true)}
                 onPressOut={() => setIsRecording(false)}
+                accessibilityLabel={isRecording ? "Release to send message" : "Hold to speak to coach"}
+                accessibilityRole="button"
               >
                 <Mic size={32} color={isRecording ? '#0A0E1A' : '#d4a954'} />
               </Pressable>
@@ -242,9 +249,18 @@ export default function CoachScreen() {
                 placeholder="Type a message..."
                 placeholderTextColor="#5A6B7D"
                 multiline
+                maxLength={1000}
                 onSubmitEditing={() => sendMessage(inputText)}
+                accessibilityLabel="Message to coach"
+                accessibilityHint="Type your question or concern"
               />
-              <Pressable className="p-2 ml-2" onPress={() => sendMessage(inputText)}>
+              <Pressable
+                className="p-2 ml-2"
+                onPress={() => sendMessage(inputText)}
+                accessibilityLabel="Send message"
+                accessibilityRole="button"
+                disabled={!inputText.trim() || isLoading}
+              >
                 <Send size={20} color={inputText.trim() ? '#d4a954' : '#5A6B7D'} />
               </Pressable>
             </View>
