@@ -1,7 +1,7 @@
 import { View, Text, Modal, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Flame, Settings } from 'lucide-react-native';
 import { ExerciseCategoryId, getContextualSuggestion, EXERCISE_CATEGORIES } from '@/constants/exercises';
 import { GoldenOrb } from '@/components/pause/GoldenOrb';
@@ -9,9 +9,30 @@ import { RadialSelector } from '@/components/pause/RadialSelector';
 import { ActiveSession } from '@/components/pause/ActiveSession';
 import { IntentionScreen } from '@/components/pause/IntentionScreen';
 import { router } from 'expo-router';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import * as Haptics from 'expo-haptics';
 
 const GOLD = '#d4a954';
 const ORB_SIZE = 160;
+
+// Map exercise category IDs to backend exercise types
+const EXERCISE_TYPE_MAP: Record<ExerciseCategoryId, string> = {
+  breath: 'breathing',
+  light: 'golden_light',
+  count: 'counting',
+  talk: 'self_talk',
+  relax: 'relaxation',
+};
+
+// Exercise prompts
+const EXERCISE_PROMPTS: Record<ExerciseCategoryId, string> = {
+  breath: 'Breathe in through your nose... and out through your mouth...',
+  light: 'Imagine golden light filling you from head to toe...',
+  count: 'Focus on counting slowly... changing the channel...',
+  talk: 'Speak kindly to yourself... your mind is listening...',
+  relax: 'Release the tension... let each muscle relax...',
+};
 
 export default function PauseScreen() {
   const [isSessionActive, setIsSessionActive] = useState(false);
@@ -19,30 +40,70 @@ export default function PauseScreen() {
   const { recommendedExercise } = getContextualSuggestion();
   const [selectedExercise, setSelectedExercise] = useState<ExerciseCategoryId>(recommendedExercise);
 
+  // Backend queries
+  const user = useQuery(api.users.getCurrent);
+  const createSession = useMutation(api.sessions.create);
+  const incrementPauseCount = useMutation(api.users.incrementPauseCount);
+  const addIntention = useMutation(api.intentions.add);
+
   const selectedCategory = EXERCISE_CATEGORIES.find(c => c.id === selectedExercise);
-  const streakCount = 7; // TODO: Get from backend
+  const streakCount = user?.currentStreak ?? 0;
 
-  const handleOrbLongPress = () => {
+  const handleExerciseSelect = useCallback((exerciseId: ExerciseCategoryId) => {
+    Haptics.selectionAsync();
+    setSelectedExercise(exerciseId);
+  }, []);
+
+  const handleOrbLongPress = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     setIsSessionActive(true);
-  };
+  }, []);
 
-  const handleSessionClose = () => {
+  const handleSessionClose = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setIsSessionActive(false);
-  };
+  }, []);
 
-  const handleSessionComplete = () => {
+  const handleSessionComplete = useCallback(async () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
+    try {
+      // Record session in backend
+      const exerciseType = EXERCISE_TYPE_MAP[selectedExercise];
+      await createSession({
+        exerciseType,
+        durationSeconds: selectedCategory?.defaultDuration || 90,
+        completed: true,
+      });
+      await incrementPauseCount();
+    } catch (e) {
+      console.log('Failed to record session:', e);
+    }
+
     setIsSessionActive(false);
     setShowIntention(true);
-  };
+  }, [selectedExercise, selectedCategory, createSession, incrementPauseCount]);
 
-  const handleIntentionComplete = (intention: string) => {
-    console.log('Intention saved:', intention);
-    setShowIntention(false);
-  };
+  const handleIntentionComplete = useCallback(async (intention: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
-  const handleIntentionSkip = () => {
+    try {
+      await addIntention({ text: intention });
+    } catch (e) {
+      console.log('Failed to save intention:', e);
+    }
+
     setShowIntention(false);
-  };
+  }, [addIntention]);
+
+  const handleIntentionSkip = useCallback(() => {
+    setShowIntention(false);
+  }, []);
+
+  const handleSettingsPress = useCallback(() => {
+    Haptics.selectionAsync();
+    router.push('/settings');
+  }, []);
 
   return (
     <View className="flex-1 bg-background-dark">
@@ -57,7 +118,10 @@ export default function PauseScreen() {
         {/* Header Row */}
         <View className="flex-row items-center justify-between px-5 pt-3">
           {/* Streak Counter */}
-          <Pressable className="flex-row items-center bg-surface-dark/60 px-3 py-1.5 rounded-full">
+          <Pressable
+            className="flex-row items-center bg-surface-dark/60 px-3 py-1.5 rounded-full"
+            onPress={() => Haptics.selectionAsync()}
+          >
             <Flame size={16} color={GOLD} fill={GOLD} />
             <Text
               className="text-sm font-bold ml-1.5"
@@ -70,7 +134,7 @@ export default function PauseScreen() {
           {/* Settings Button */}
           <Pressable
             className="w-10 h-10 rounded-full bg-surface-dark/60 items-center justify-center"
-            onPress={() => router.push('/settings')}
+            onPress={handleSettingsPress}
           >
             <Settings size={20} color="#8A9BB5" />
           </Pressable>
@@ -83,7 +147,7 @@ export default function PauseScreen() {
             {/* Radial selector (positions exercises around the orb) */}
             <RadialSelector
               selected={selectedExercise}
-              onSelect={setSelectedExercise}
+              onSelect={handleExerciseSelect}
               orbSize={ORB_SIZE}
             />
 
@@ -130,7 +194,7 @@ export default function PauseScreen() {
           totalDuration={selectedCategory?.defaultDuration || 90}
           onClose={handleSessionClose}
           onComplete={handleSessionComplete}
-          prompt="Breathe in the golden light..."
+          prompt={EXERCISE_PROMPTS[selectedExercise]}
         />
       </Modal>
 

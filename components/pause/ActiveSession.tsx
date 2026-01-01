@@ -1,7 +1,8 @@
 import { View, Text, Pressable, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { X } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import * as Haptics from 'expo-haptics';
 
 interface ActiveSessionProps {
   exerciseName: string;
@@ -20,6 +21,8 @@ export function ActiveSession({
 }: ActiveSessionProps) {
   const [elapsed, setElapsed] = useState(0);
   const floatAnim = useRef(new Animated.Value(0)).current;
+  const waveAnims = useRef([...Array(10)].map(() => new Animated.Value(0.5))).current;
+  const breathPhase = useRef<'inhale' | 'exhale'>('inhale');
 
   // Float animation for orb
   useEffect(() => {
@@ -40,6 +43,49 @@ export function ActiveSession({
     animation.start();
     return () => animation.stop();
   }, [floatAnim]);
+
+  // Wave animation for audio visualization
+  useEffect(() => {
+    const animations = waveAnims.map((anim, i) => {
+      return Animated.loop(
+        Animated.sequence([
+          Animated.timing(anim, {
+            toValue: 0.3 + Math.random() * 0.7,
+            duration: 300 + Math.random() * 400,
+            useNativeDriver: false,
+          }),
+          Animated.timing(anim, {
+            toValue: 0.5 + Math.random() * 0.3,
+            duration: 300 + Math.random() * 400,
+            useNativeDriver: false,
+          }),
+        ])
+      );
+    });
+
+    animations.forEach((anim) => anim.start());
+    return () => animations.forEach((anim) => anim.stop());
+  }, [waveAnims]);
+
+  // Breathing rhythm haptics (every 4 seconds - inhale/exhale cycle)
+  useEffect(() => {
+    const hapticInterval = setInterval(() => {
+      if (breathPhase.current === 'inhale') {
+        // Light tap for inhale
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        breathPhase.current = 'exhale';
+      } else {
+        // Softer tap for exhale
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
+        breathPhase.current = 'inhale';
+      }
+    }, 4000);
+
+    // Initial haptic
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    return () => clearInterval(hapticInterval);
+  }, []);
 
   // Timer
   useEffect(() => {
@@ -69,6 +115,13 @@ export function ActiveSession({
     outputRange: [0, -10],
   });
 
+  const handleClose = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onClose();
+  }, [onClose]);
+
+  const baseHeights = [20, 32, 48, 64, 40, 40, 64, 48, 32, 20];
+
   return (
     <View className="flex-1 bg-background-dark relative overflow-hidden">
       {/* Background glow effects */}
@@ -79,14 +132,22 @@ export function ActiveSession({
         {/* Header */}
         <View className="flex-row items-center justify-between px-6 pt-2">
           <Pressable
-            className="w-14 h-14 rounded-full bg-white/10 items-center justify-center border border-white/10"
-            onPress={onClose}
+            className="w-14 h-14 rounded-full bg-white/10 items-center justify-center border border-white/10 active:opacity-70"
+            onPress={handleClose}
           >
             <X size={32} color="#F0F4F8" />
           </Pressable>
 
           <View className="flex-row items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
-            <View className="w-2 h-2 rounded-full bg-red-500" />
+            <Animated.View
+              className="w-2 h-2 rounded-full bg-red-500"
+              style={{
+                opacity: floatAnim.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: [1, 0.5, 1],
+                }),
+              }}
+            />
             <Text className="text-xs font-bold tracking-widest text-white/80 uppercase">
               Live
             </Text>
@@ -111,11 +172,16 @@ export function ActiveSession({
               {/* Waveform + Timer */}
               <View className="flex-row items-center gap-1.5">
                 {/* Left wave bars */}
-                {[20, 32, 48, 64, 40].map((h, i) => (
-                  <View
+                {waveAnims.slice(0, 5).map((anim, i) => (
+                  <Animated.View
                     key={`left-${i}`}
                     className="w-1.5 rounded-full bg-primary/80"
-                    style={{ height: h * (0.5 + Math.sin(Date.now() / 500 + i) * 0.25) }}
+                    style={{
+                      height: anim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [baseHeights[i] * 0.3, baseHeights[i]],
+                      }),
+                    }}
                   />
                 ))}
 
@@ -130,11 +196,16 @@ export function ActiveSession({
                 </View>
 
                 {/* Right wave bars */}
-                {[40, 64, 48, 32, 20].map((h, i) => (
-                  <View
+                {waveAnims.slice(5, 10).map((anim, i) => (
+                  <Animated.View
                     key={`right-${i}`}
                     className="w-1.5 rounded-full bg-primary/80"
-                    style={{ height: h * (0.5 + Math.sin(Date.now() / 500 + i + 5) * 0.25) }}
+                    style={{
+                      height: anim.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [baseHeights[i + 5] * 0.3, baseHeights[i + 5]],
+                      }),
+                    }}
                   />
                 ))}
               </View>
@@ -150,7 +221,7 @@ export function ActiveSession({
 
           {/* Progress bar */}
           <View className="w-full h-2 rounded-full bg-white/10 overflow-hidden border border-white/5">
-            <View
+            <Animated.View
               className="h-full rounded-full bg-primary"
               style={{ width: `${progress}%` }}
             />
