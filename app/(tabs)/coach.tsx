@@ -1,14 +1,27 @@
 import { View, Text, Pressable, TextInput, ScrollView, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Mic, MessageSquare, Send, Volume2 } from 'lucide-react-native';
-import { useState, useRef } from 'react';
-import { getCoachResponse } from '@/services/gemini';
+import { useState, useRef, useCallback } from 'react';
+import { getCoachResponse, CoachAction } from '@/services/gemini';
 import { speakText, stopSpeaking } from '@/services/elevenlabs';
+import { router } from 'expo-router';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import * as Haptics from 'expo-haptics';
 
 interface Message {
   role: 'user' | 'assistant';
   content: string;
 }
+
+// Map coach action exercise IDs to app exercise IDs
+const EXERCISE_ID_MAP: Record<string, string> = {
+  breathing: 'breath',
+  golden_light: 'light',
+  counting: 'count',
+  self_talk: 'talk',
+  relaxation: 'relax',
+};
 
 export default function CoachScreen() {
   const [mode, setMode] = useState<'voice' | 'chat'>('voice');
@@ -18,6 +31,55 @@ export default function CoachScreen() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
+
+  // Backend mutations
+  const addIntention = useMutation(api.intentions.add);
+
+  // Execute coach actions
+  const executeAction = useCallback(async (action: CoachAction) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+    switch (action.type) {
+      case 'START_EXERCISE':
+        // Navigate to PAUSE tab with exercise pre-selected
+        const exerciseId = EXERCISE_ID_MAP[action.id || 'breathing'] || 'breath';
+        router.push({
+          pathname: '/',
+          params: { exercise: exerciseId, autoStart: 'true' }
+        });
+        break;
+
+      case 'SHOW_PROGRESS':
+        router.push('/habits');
+        break;
+
+      case 'SHOW_HABITS':
+        router.push('/settings');
+        break;
+
+      case 'CAPTURE_INTENTION':
+        if (action.text) {
+          try {
+            await addIntention({ text: action.text });
+            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+          } catch (e) {
+            console.error('Failed to save intention:', e);
+          }
+        }
+        break;
+
+      case 'PLAY_CONTENT':
+        // Navigate to library with content ID
+        router.push({
+          pathname: '/library',
+          params: { contentId: action.id }
+        });
+        break;
+
+      default:
+        console.log('Unknown action type:', action.type);
+    }
+  }, [addIntention]);
 
   const sendMessage = async (text: string) => {
     if (!text.trim() || isLoading) return;
@@ -35,6 +97,14 @@ export default function CoachScreen() {
 
       const assistantMessage: Message = { role: 'assistant', content: response.message };
       setMessages(prev => [...prev, assistantMessage]);
+
+      // Execute any action returned by the coach
+      if (response.action) {
+        // Small delay to let the message render before navigation
+        setTimeout(() => {
+          executeAction(response.action!);
+        }, 500);
+      }
 
       if (mode === 'voice') {
         setIsSpeaking(true);
@@ -57,8 +127,14 @@ export default function CoachScreen() {
   };
 
   const toggleMode = () => {
+    Haptics.selectionAsync();
     stopSpeaking();
     setMode(mode === 'voice' ? 'chat' : 'voice');
+  };
+
+  const handleQuickPrompt = (prompt: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    sendMessage(prompt);
   };
 
   return (
@@ -113,13 +189,13 @@ export default function CoachScreen() {
                 key={index}
                 className={`max-w-[80%] px-4 py-3 rounded-2xl mb-3 ${
                   msg.role === 'user'
-                    ? 'bg-primary self-end rounded-br-sm'
-                    : 'bg-surface-dark self-start rounded-bl-sm'
+                    ? 'bg-surface-dark self-end rounded-br-sm'
+                    : 'bg-primary/15 self-start rounded-bl-sm border border-primary/20'
                 }`}
               >
                 <Text
                   className={`text-[15px] leading-[21px] ${
-                    msg.role === 'user' ? 'text-background-dark' : 'text-text-primary'
+                    msg.role === 'user' ? 'text-text-primary' : 'text-text-primary'
                   }`}
                 >
                   {msg.content}
@@ -179,8 +255,8 @@ export default function CoachScreen() {
             {["I'm anxious", 'Help me focus', 'Need energy'].map((prompt) => (
               <Pressable
                 key={prompt}
-                className="bg-surface-dark px-4 py-2 rounded-full"
-                onPress={() => sendMessage(prompt)}
+                className="bg-surface-dark px-4 py-2 rounded-full active:opacity-70"
+                onPress={() => handleQuickPrompt(prompt)}
               >
                 <Text className="text-text-secondary text-sm">{prompt}</Text>
               </Pressable>

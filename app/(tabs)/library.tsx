@@ -130,11 +130,11 @@ export default function LibraryScreen() {
           <Text className="text-text-primary text-2xl font-bold">Library</Text>
         </View>
 
-        {/* Tab Filter */}
-        <View className="flex-row px-5 mb-5 gap-3">
+        {/* Tab Filter - iOS segment control style with underline */}
+        <View className="flex-row px-5 mb-5 border-b border-white/10">
           <Pressable
-            className={`px-5 py-2.5 rounded-full ${
-              activeTab === 'exercises' ? 'bg-primary' : 'bg-surface-dark'
+            className={`px-4 py-3 ${
+              activeTab === 'exercises' ? 'border-b-2 border-primary' : ''
             }`}
             onPress={() => {
               Haptics.selectionAsync();
@@ -143,15 +143,15 @@ export default function LibraryScreen() {
           >
             <Text
               className={`text-sm font-semibold ${
-                activeTab === 'exercises' ? 'text-background-dark' : 'text-text-secondary'
+                activeTab === 'exercises' ? 'text-primary' : 'text-text-secondary'
               }`}
             >
               Exercises
             </Text>
           </Pressable>
           <Pressable
-            className={`px-5 py-2.5 rounded-full ${
-              activeTab === 'learn' ? 'bg-primary' : 'bg-surface-dark'
+            className={`px-4 py-3 ${
+              activeTab === 'learn' ? 'border-b-2 border-primary' : ''
             }`}
             onPress={() => {
               Haptics.selectionAsync();
@@ -160,7 +160,7 @@ export default function LibraryScreen() {
           >
             <Text
               className={`text-sm font-semibold ${
-                activeTab === 'learn' ? 'text-background-dark' : 'text-text-secondary'
+                activeTab === 'learn' ? 'text-primary' : 'text-text-secondary'
               }`}
             >
               Learn
