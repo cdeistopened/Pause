@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, Pressable, Animated } from 'react-native';
+import { View, Text, ScrollView, Pressable, Animated, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Flame, Award, Info, Wind, Sun, Hash, MessageCircle, Smile } from 'lucide-react-native';
+import { Flame, Award, Info } from 'lucide-react-native';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import { useRef, useEffect } from 'react';
@@ -16,14 +16,6 @@ const EXERCISE_COLORS: Record<string, string> = {
   default: '#D4A853',        // Fallback gold
 };
 
-const EXERCISE_ICONS: Record<string, React.ReactNode> = {
-  breathing: <Wind size={12} color="#4A90D9" />,
-  golden_light: <Sun size={12} color="#D4A853" />,
-  counting: <Hash size={12} color="#10B981" />,
-  self_talk: <MessageCircle size={12} color="#9333EA" />,
-  relaxation: <Smile size={12} color="#06B6D4" />,
-};
-
 // Generate dots
 const DOT_COLUMNS = 20;
 const YEAR_GOAL = 365;
@@ -34,6 +26,9 @@ export default function ProgressScreen() {
   const user = useQuery(api.users.getCurrent);
   const sessionStats = useQuery(api.sessions.getStatsByExerciseType);
   const recentSessions = useQuery(api.sessions.list, { limit: 365 });
+
+  // Loading state check
+  const isLoading = user === undefined;
 
   // Progress data from backend with fallbacks
   const progressData = {
@@ -78,11 +73,17 @@ export default function ProgressScreen() {
           <Text className="text-text-primary text-xl font-bold tracking-tight">
             Progress
           </Text>
-          <Pressable className="w-12 items-end">
+          <Pressable className="w-12 items-end" accessibilityLabel="Progress info" accessibilityRole="button">
             <Info size={20} color="#d4a954" />
           </Pressable>
         </View>
 
+        {isLoading ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" color="#d4a954" />
+            <Text className="text-text-secondary mt-4 text-base">Loading your progress...</Text>
+          </View>
+        ) : (
         <ScrollView
           className="flex-1 px-6"
           contentContainerStyle={{ paddingTop: 24, paddingBottom: 32 }}
@@ -223,6 +224,7 @@ export default function ProgressScreen() {
             </View>
           </View>
         </ScrollView>
+        )}
       </SafeAreaView>
     </View>
   );

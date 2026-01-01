@@ -3,7 +3,16 @@ import { ClerkProvider, ClerkLoaded, useAuth } from "@clerk/clerk-expo";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import * as SecureStore from "expo-secure-store";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+
+// Dark theme colors matching the app
+const COLORS = {
+  background: '#0A0E1A',
+  surface: '#162235',
+  primary: '#d4a954',
+  textPrimary: '#F0F4F8',
+  textSecondary: '#8A9BB5',
+};
 
 // Check if Convex URL is properly configured
 const convexUrl = process.env.EXPO_PUBLIC_CONVEX_URL;
@@ -108,44 +117,54 @@ export default AuthProvider;
 const styles = StyleSheet.create({
   setupContainer: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.background,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
   setupCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 24,
+    backgroundColor: COLORS.surface,
+    borderRadius: 24,
+    padding: 32,
     maxWidth: 400,
     width: '100%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 8,
   },
   setupTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16,
+    color: COLORS.primary,
+    marginBottom: 20,
     textAlign: 'center',
   },
   setupText: {
     fontSize: 16,
-    color: '#666',
+    color: COLORS.textSecondary,
     marginBottom: 12,
-    lineHeight: 22,
+    lineHeight: 24,
     textAlign: 'center',
   },
   setupStep: {
     fontSize: 14,
-    color: '#888',
-    marginTop: 16,
-    padding: 16,
-    backgroundColor: '#f8f9fa',
-    borderRadius: 8,
-    lineHeight: 20,
+    color: COLORS.textPrimary,
+    marginTop: 20,
+    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 16,
+    lineHeight: 22,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  loadingContainer: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
