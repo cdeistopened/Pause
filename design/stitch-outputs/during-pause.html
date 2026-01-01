@@ -1,0 +1,123 @@
+<!-- DURING PAUSE (Active Session) -->
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pause - Active Session</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4a954",
+                        "primary-light": "#f3dfa2",
+                        "background-dark": "#0A0E1A",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'wave': 'wave 1.5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        wave: {
+                            '0%, 100%': { opacity: '0.6', height: '30%' },
+                            '50%': { opacity: '1', height: '70%' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .text-glow {
+                text-shadow: 0 0 25px rgba(212, 169, 84, 0.6);
+            }
+            .orb-glow {
+                box-shadow: 0 0 100px -20px rgba(212, 169, 84, 0.5), inset 0 0 60px rgba(212, 169, 84, 0.2);
+            }
+            .bg-radial-glow {
+                background: radial-gradient(circle, rgba(212, 169, 84, 0.15) 0%, rgba(10, 14, 26, 0) 70%);
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display text-white antialiased overflow-hidden">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+
+<!-- Background Glow -->
+<div class="absolute inset-0 pointer-events-none z-0">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-radial-glow opacity-60"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] bg-primary/10 blur-[90px] rounded-full"></div>
+</div>
+
+<!-- Header -->
+<header class="relative z-20 flex items-center justify-between p-6 pt-8">
+<button class="group flex size-14 items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/10 transition-all hover:bg-white/20 active:scale-95">
+<span class="material-symbols-outlined text-white group-hover:text-primary-light transition-colors" style="font-size: 32px;">close</span>
+</button>
+<div class="flex items-center gap-2.5 bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/5">
+<div class="h-2 w-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+<span class="text-sm font-bold tracking-widest text-white/80 uppercase">Live</span>
+</div>
+</header>
+
+<!-- Main Orb -->
+<main class="relative z-10 flex flex-grow flex-col items-center justify-center pb-16">
+<div class="relative flex items-center justify-center aspect-square w-[90vw] max-w-[420px] animate-float">
+<div class="absolute inset-0 rounded-full bg-gradient-to-br from-primary/30 via-background-dark/50 to-background-dark border border-primary/30 backdrop-blur-md orb-glow"></div>
+<div class="absolute inset-2 rounded-full border border-primary/20 opacity-70"></div>
+<div class="absolute inset-8 rounded-full border border-primary/10 opacity-50"></div>
+
+<!-- Audio Waveform -->
+<div class="relative flex flex-col items-center justify-center gap-2 z-20 w-full h-full p-8">
+<div class="absolute inset-0 flex items-center justify-center gap-[6px] opacity-80 pointer-events-none">
+<div class="w-1.5 bg-primary/80 rounded-full h-8 animate-wave" style="animation-delay: 0.1s"></div>
+<div class="w-1.5 bg-primary rounded-full h-12 animate-wave" style="animation-delay: 0.2s"></div>
+<div class="w-1.5 bg-primary/90 rounded-full h-16 animate-wave" style="animation-delay: 0.3s"></div>
+<div class="w-1.5 bg-primary rounded-full h-24 animate-wave" style="animation-delay: 0.4s"></div>
+<div class="w-1.5 bg-primary/80 rounded-full h-14 animate-wave" style="animation-delay: 0.5s"></div>
+<div class="w-32 sm:w-40"></div>
+<div class="w-1.5 bg-primary/80 rounded-full h-14 animate-wave" style="animation-delay: 0.5s"></div>
+<div class="w-1.5 bg-primary rounded-full h-24 animate-wave" style="animation-delay: 0.4s"></div>
+<div class="w-1.5 bg-primary/90 rounded-full h-16 animate-wave" style="animation-delay: 0.3s"></div>
+<div class="w-1.5 bg-primary rounded-full h-12 animate-wave" style="animation-delay: 0.2s"></div>
+<div class="w-1.5 bg-primary/80 rounded-full h-8 animate-wave" style="animation-delay: 0.1s"></div>
+</div>
+
+<!-- Timer -->
+<div class="flex flex-col items-center z-30 drop-shadow-2xl">
+<div class="text-[4.5rem] sm:text-[5.5rem] leading-none font-light text-white tracking-tighter font-display text-glow tabular-nums">0:47</div>
+<div class="text-2xl font-medium text-primary mt-2 tracking-wide">/ 1:30</div>
+</div>
+</div>
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="relative z-20 flex flex-col items-center gap-8 px-8 pb-12 w-full max-w-lg mx-auto">
+<div class="flex flex-col gap-5 w-full text-center">
+<h2 class="text-4xl font-semibold text-white tracking-wide drop-shadow-lg">Golden Light</h2>
+<div class="relative h-2 w-full rounded-full bg-white/10 overflow-hidden backdrop-blur-sm border border-white/5">
+<div class="absolute top-0 left-0 h-full w-[52%] rounded-full bg-gradient-to-r from-primary to-primary-light shadow-[0_0_15px_rgba(212,169,84,0.8)] transition-all duration-1000 ease-linear"></div>
+</div>
+</div>
+<div class="min-h-[3.5rem] flex items-center justify-center">
+<p class="text-2xl font-light text-primary-light/90 italic animate-pulse-slow text-center max-w-[90%] leading-relaxed drop-shadow-md">"Breathe in the golden light..."</p>
+</div>
+</footer>
+</div>
+</body></html>

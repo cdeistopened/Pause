@@ -1,0 +1,83 @@
+<!-- ONBOARDING - Welcome -->
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>The Pause - Welcome</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#eead2b",
+                        "primary-dark": "#d49619",
+                        "background-dark": "#1A2B3C",
+                        "text-secondary": "#B0C4DE",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display antialiased">
+<div class="relative flex h-full min-h-screen w-full flex-col bg-background-dark overflow-hidden">
+
+<!-- Background Effects -->
+<div class="absolute inset-0 bg-gradient-radial from-[#2a4561] via-background-dark to-background-dark opacity-80 pointer-events-none"></div>
+
+<!-- Main Content -->
+<div class="relative z-10 flex flex-col h-full flex-grow max-w-md mx-auto w-full px-6 pt-8 pb-6 justify-between">
+
+<!-- Header Spacer -->
+<div class="w-full h-6"></div>
+
+<!-- Hero Image -->
+<div class="flex-grow flex flex-col justify-center items-center py-6">
+<div class="relative w-full aspect-[4/5] max-h-[420px] rounded-2xl overflow-visible">
+<div class="absolute -inset-4 bg-primary/20 blur-2xl rounded-full opacity-60"></div>
+<div class="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-black/40 border border-white/5 bg-[#221c11]">
+<img alt="Portrait of Dr. Miller" class="w-full h-full object-cover opacity-90 hover:opacity-100 transition-opacity duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvCDDLCeEwtinwRlbFVBWcuBxv1zFaLfamxvYjMpto_6iNlwGjehZGQTPmSkrBEP9yG6XozRuJjoHmsDpL3uQWtiyvnCNNXNl-HpkxUFwBa0Jb50Nvx4sRondkCr9ROxbFw55BNGeOcb5xBvuFaHtwcliAN3LaDkT7qCKku5vENCrPNmh71rTf0hJ2nMFyS4JFlzM0NWaYYFtir2AE9Yd-hyqd0GZ4ok4HjK-L3Lbwn8bxhH0ACtu1UgVnbrHSt7ypWytTow59L4U"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 via-transparent to-transparent"></div>
+</div>
+</div>
+</div>
+
+<!-- Text Content -->
+<div class="flex flex-col items-center text-center space-y-6 mt-4">
+<h1 class="text-white text-4xl font-extrabold tracking-tight leading-[1.15] drop-shadow-sm">
+Welcome to <br/>
+<span class="text-primary">The Pause</span>
+</h1>
+<p class="text-text-secondary text-lg font-light leading-relaxed max-w-[90%] tracking-wide">
+<em class="not-italic opacity-90">"Pause, breathe, and reconnect with your inner self. Your journey to mindfulness begins here."</em>
+</p>
+</div>
+
+<!-- Actions -->
+<div class="flex flex-col gap-5 mt-10 w-full">
+<button class="relative group w-full cursor-pointer flex items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-gradient-to-br from-primary to-primary-dark shadow-[0_4px_20px_rgba(238,173,43,0.25)] transition-all duration-300 hover:shadow-[0_6px_25px_rgba(238,173,43,0.35)] active:scale-[0.98]">
+<div class="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<span class="text-background-dark font-bold text-lg tracking-wide relative z-10 flex items-center gap-2">
+Get Started
+<span class="material-symbols-outlined text-xl font-bold">arrow_forward</span>
+</span>
+</button>
+<p class="text-text-secondary/70 text-sm font-medium text-center">
+Already have an account?
+<a class="text-primary hover:text-primary-dark transition-colors underline decoration-primary/30 underline-offset-4" href="#">Log in</a>
+</p>
+</div>
+
+</div>
+</div>
+</body></html>

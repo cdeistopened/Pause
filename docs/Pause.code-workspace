@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "Pause",
+			"path": ".."
+		},
+		{
+			"name": "docs",
+			"path": "../../RLM app/docs"
+		}
+	],
+	"settings": {}
+}

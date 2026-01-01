@@ -1,0 +1,82 @@
+<!-- INTENTION (Post-Pause) -->
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Intention - The Pause</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#EBB305","primary-light": "#FCD34D",
+                        "background-dark": "#0A0E1A",
+                        "input-bg": "#1F2937",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.8s ease-out forwards',
+                        'pulse-glow': 'pulseGlow 3s infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.2', transform: 'scale(1)' },
+                            '50%': { opacity: '0.4', transform: 'scale(1.1)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display antialiased">
+<div class="relative flex h-screen w-full flex-col bg-background-dark overflow-hidden">
+<div class="flex flex-1 flex-col items-center justify-between px-6 pt-16 pb-8 w-full max-w-md mx-auto">
+
+<!-- Success Icon -->
+<div class="flex w-full flex-col items-center justify-center flex-1 animate-fade-up">
+<div class="relative flex items-center justify-center mb-10">
+<div class="absolute inset-0 rounded-full bg-primary/20 blur-2xl w-32 h-32 m-auto animate-pulse-glow"></div>
+<div class="relative flex items-center justify-center w-24 h-24 rounded-full border-[3px] border-primary/40 shadow-[0_0_25px_rgba(235,179,5,0.25)] bg-background-dark/50 backdrop-blur-sm">
+<span class="material-symbols-outlined text-[48px] text-primary drop-shadow-[0_0_8px_rgba(235,179,5,0.6)]" style="font-variation-settings: 'wght' 700;">check</span>
+</div>
+</div>
+<h2 class="text-white text-4xl font-bold tracking-tight text-center leading-tight mb-3 drop-shadow-lg">Pause complete</h2>
+</div>
+
+<!-- Intention Input -->
+<div class="w-full mb-auto animate-fade-up" style="animation-delay: 0.1s;">
+<label class="block" for="intention">
+<p class="text-gray-300 text-xl font-medium text-center mb-6 leading-relaxed">What will you carry forward?</p>
+<div class="relative group">
+<textarea autofocus class="w-full bg-input-bg text-white rounded-3xl border-0 ring-1 ring-gray-700/50 focus:ring-2 focus:ring-primary placeholder:text-gray-400/70 text-xl px-6 py-5 resize-none transition-all duration-300 shadow-lg focus:shadow-[0_0_25px_rgba(235,179,5,0.15)] outline-none caret-primary" id="intention" placeholder="Type your intention..." rows="3"></textarea>
+</div>
+</label>
+</div>
+
+<!-- Actions -->
+<div class="w-full flex flex-col items-center gap-6 mt-8 animate-fade-up" style="animation-delay: 0.2s;">
+<button class="group relative w-full h-[60px] flex items-center justify-center rounded-full bg-primary hover:bg-primary-light transition-all duration-200 active:scale-[0.98] shadow-[0_0_15px_rgba(235,179,5,0.3)]">
+<span class="text-background-dark text-[18px] font-extrabold tracking-wide uppercase">Done</span>
+</button>
+<a class="flex items-center gap-2 text-primary/90 hover:text-[#FFF5D1] transition-colors text-base font-semibold" href="#">
+Skip
+<span class="material-symbols-outlined text-[18px] leading-none pt-[1px]">arrow_forward</span>
+</a>
+</div>
+
+</div>
+</div>
+</body></html>

@@ -1,0 +1,102 @@
+<!-- PROGRESS (The Dot Grid) -->
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Progress - The Pause</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4A853","primary-glow": "rgba(212, 168, 83, 0.6)",
+                        "background-dark": "#0E1A2A","surface-dark": "#162235","surface-highlight": "#1e2c42",
+                        "dot-empty": "#2E3A4D","text-secondary": "#8A9BB5","text-primary": "#F0F4F8",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                    animation: {
+                        'pulse-glow': 'pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(212, 168, 83, 0.5)' },
+                            '50%': { boxShadow: '0 0 15px rgba(212, 168, 83, 0.9)' },
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-dark font-display antialiased min-h-screen flex flex-col items-center text-text-primary">
+<div class="w-full max-w-md flex flex-col h-full min-h-screen relative overflow-x-hidden pb-8 bg-background-dark">
+
+<!-- Header -->
+<header class="flex items-center justify-between p-6 pb-2 sticky top-0 z-10 bg-background-dark/80 backdrop-blur-md border-b border-white/5">
+<div class="w-12"></div>
+<h1 class="text-text-primary text-xl font-bold tracking-tight">Progress</h1>
+<button class="flex items-center justify-end w-auto text-primary hover:text-primary/80 transition-colors gap-1 group">
+<span class="material-symbols-outlined text-[20px] font-light group-hover:scale-110 transition-transform">info</span>
+</button>
+</header>
+
+<main class="flex-1 flex flex-col px-6 pt-6">
+<!-- Big Number -->
+<section class="flex flex-col items-center mb-10">
+<div class="relative group cursor-pointer">
+<h2 class="text-[7rem] font-bold text-primary tracking-tighter leading-none mb-2 drop-shadow-2xl">147</h2>
+<div class="absolute inset-0 bg-primary/20 blur-[50px] rounded-full -z-10 scale-75 animate-pulse"></div>
+</div>
+<p class="text-text-secondary text-base font-medium tracking-wide">Your Pauses (lifetime practices)</p>
+</section>
+
+<!-- Dot Grid -->
+<section class="w-full mb-8">
+<div class="grid grid-cols-[repeat(20,minmax(0,1fr))] gap-x-2 gap-y-2.5 w-full mx-auto" id="dot-grid">
+<!-- Filled dots (147) -->
+<!-- Empty dots for remaining -->
+</div>
+<div class="mt-8 text-center">
+<p class="text-text-secondary text-sm font-semibold tracking-wide uppercase opacity-70">365 pauses this year</p>
+</div>
+</section>
+
+<!-- Stats Cards -->
+<section class="mt-auto grid grid-cols-2 gap-4 pb-4">
+<div class="bg-surface-dark rounded-3xl p-6 flex flex-col justify-between h-40 relative overflow-hidden group border border-white/5 shadow-xl hover:shadow-2xl transition-all duration-300 hover:border-primary/20 hover:-translate-y-1">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors blur-xl"></div>
+<div class="flex items-start justify-between z-10">
+<div class="p-2 bg-background-dark rounded-full">
+<span class="material-symbols-outlined text-primary text-2xl">local_fire_department</span>
+</div>
+</div>
+<div class="z-10">
+<h3 class="text-white text-3xl font-bold leading-tight tracking-tight">47 <span class="text-sm font-medium text-text-secondary ml-0.5 align-middle">days</span></h3>
+<p class="text-text-secondary text-xs font-semibold uppercase tracking-wider mt-2">Current streak</p>
+</div>
+</div>
+<div class="bg-surface-dark rounded-3xl p-6 flex flex-col justify-between h-40 relative overflow-hidden group border border-white/5 shadow-xl hover:shadow-2xl transition-all duration-300 hover:border-primary/20 hover:-translate-y-1">
+<div class="absolute -right-6 -top-6 w-24 h-24 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors blur-xl"></div>
+<div class="flex items-start justify-between z-10">
+<div class="p-2 bg-background-dark rounded-full">
+<span class="material-symbols-outlined text-primary text-2xl">verified</span>
+</div>
+</div>
+<div class="z-10">
+<h3 class="text-white text-3xl font-bold leading-tight tracking-tight">89 <span class="text-sm font-medium text-text-secondary ml-0.5 align-middle">days</span></h3>
+<p class="text-text-secondary text-xs font-semibold uppercase tracking-wider mt-2">Longest streak</p>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

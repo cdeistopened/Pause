@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ray Peat Archive - Episode Card</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#44d7e4",
+                        "primary-dark": "#35aab5",
+                        "secondary-riso": "#f472b6","background-light": "#f8fbfb",
+                        "background-dark": "#111f21",
+                        "paper": "#ffffff",
+                        "paper-dark": "#1a2c30",
+                        "ink": "#0e191b",
+                        "ink-light": "#508f95",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "sm": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiIGZpbGwtb3BhY2l0eT0iMC4yIi8+Cjwvc3ZnPg==')",
+                    }
+                },
+            },
+        }
+    </script>
+<style>.riso-multiply {
+            mix-blend-mode: multiply;
+        }
+        .dark .riso-multiply {
+            mix-blend-mode: screen;}
+        .texture-noise {
+            background-image: radial-gradient(#0e191b 1px, transparent 0);
+            background-size: 4px 4px;
+            opacity: 0.05;
+        }
+        .dark .texture-noise {
+            background-image: radial-gradient(#ffffff 1px, transparent 0);
+            opacity: 0.05;
+        }.material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-ink dark:text-gray-100 transition-colors duration-200">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<header class="sticky top-0 z-50 w-full border-b border-[#e8f2f3] dark:border-gray-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-6 py-4">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-3 text-ink dark:text-white group" href="#">
+<div class="size-8 bg-primary text-background-dark flex items-center justify-center rounded-sm">
+<span class="material-symbols-outlined text-[20px] font-bold">library_books</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight uppercase group-hover:text-primary transition-colors">Ray Peat Archive</h1>
+</a>
+<nav class="hidden md:flex items-center gap-6 ml-4">
+<a class="text-sm font-medium text-primary border-b-2 border-primary" href="#">Podcasts</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Newsletters</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Articles</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Encyclopedia</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Q&amp;A</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex relative group">
+<input class="w-64 bg-[#e8f2f3] dark:bg-gray-800 border-none rounded-sm px-4 py-2 pl-10 text-sm focus:ring-1 focus:ring-primary placeholder-ink-light dark:placeholder-gray-500 text-ink dark:text-white transition-all" placeholder="Search archive..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-2 text-ink-light dark:text-gray-500 text-[18px]">search</span>
+</div>
+<button class="md:hidden text-ink dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow px-6 py-8 md:py-12">
+<div class="max-w-[1000px] mx-auto flex flex-col gap-8">
+<nav class="flex flex-wrap items-center gap-2 text-sm font-medium text-ink-light dark:text-gray-400 font-mono">
+<a class="hover:text-primary hover:underline decoration-primary underline-offset-4" href="#">ARCHIVE</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary hover:underline decoration-primary underline-offset-4" href="#">PODCASTS</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-ink dark:text-primary bg-primary/10 px-2 py-0.5 rounded-sm">GENERATIVE ENERGY</span>
+</nav>
+<section class="w-full max-w-4xl mx-auto my-6">
+<div class="relative group">
+<div class="absolute inset-0 bg-primary/20 rounded-sm translate-x-3 translate-y-3 -z-10 mix-blend-multiply dark:mix-blend-screen transition-transform duration-500 group-hover:translate-x-4 group-hover:translate-y-4"></div>
+<div class="absolute inset-0 bg-secondary-riso/20 rounded-sm -translate-x-2 -translate-y-2 -z-20 mix-blend-multiply dark:mix-blend-screen transition-transform duration-500 group-hover:-translate-x-3 group-hover:-translate-y-3"></div>
+<div class="relative bg-paper dark:bg-paper-dark border-2 border-ink dark:border-gray-500 rounded-sm overflow-hidden flex flex-col md:flex-row shadow-sm">
+<div class="absolute inset-0 texture-noise opacity-30 pointer-events-none z-0"></div>
+<div class="w-full md:w-4 bg-gradient-to-b from-primary via-[#e8f2f3] to-secondary-riso h-2 md:h-auto shrink-0 border-b-2 md:border-b-0 md:border-r-2 border-ink dark:border-gray-500"></div>
+<div class="flex-1 p-6 md:p-8 flex flex-col gap-6 relative z-10">
+<div class="flex justify-between items-start border-b border-ink/10 dark:border-white/10 pb-5">
+<div class="flex items-start gap-5">
+<div class="w-12 h-12 shrink-0 flex items-center justify-center bg-ink text-white dark:bg-white dark:text-ink rounded-full border-2 border-transparent group-hover:border-primary group-hover:scale-110 transition-all duration-300 shadow-md">
+<span class="text-2xl leading-none pt-0.5 font-serif">☉</span>
+</div>
+<div class="flex flex-col pt-1">
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold uppercase tracking-[0.2em] text-secondary-riso">Generative Energy</span>
+<span class="hidden sm:inline-block w-1 h-1 bg-ink-light rounded-full"></span>
+<span class="text-[10px] font-mono uppercase bg-gray-100 dark:bg-gray-800 text-ink/60 dark:text-gray-400 px-1.5 py-0.5 rounded-sm border border-gray-200 dark:border-gray-700">Ep. 42</span>
+</div>
+<span class="text-sm font-mono text-ink-light dark:text-gray-400 mt-1">October 24, 2023 • 1h 12m</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h2 class="text-3xl md:text-5xl font-display font-black uppercase leading-[0.9] text-ink dark:text-white tracking-tight">
+                                Consciousness &amp; <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary-riso">Bioenergetic Fields</span>
+</h2>
+<p class="text-base md:text-lg text-ink/80 dark:text-gray-300 font-body leading-relaxed max-w-2xl border-l-4 border-primary/30 pl-4 py-1">
+                                Ray discusses the physiological roots of consciousness, the organizing role of carbon dioxide, and the failures of mechanistic biology.
+                            </p>
+</div>
+<div class="flex flex-wrap items-center gap-4 pt-2 mt-auto">
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-ink font-bold uppercase tracking-wider text-sm px-8 py-3.5 rounded-sm border-2 border-ink dark:border-transparent shadow-[4px_4px_0px_0px_#0e191b] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,0.2)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_#0e191b] transition-all active:shadow-none active:translate-x-[4px] active:translate-y-[4px]">
+<span class="material-symbols-outlined filled text-[22px]">play_circle</span>
+                                Play
+                            </button>
+<button class="flex-1 sm:flex-none flex items-center justify-center gap-2 bg-transparent hover:bg-ink/5 dark:hover:bg-white/5 text-ink dark:text-white font-bold uppercase tracking-wider text-sm px-8 py-3.5 rounded-sm border-2 border-ink dark:border-gray-400 transition-colors group/btn">
+<span class="material-symbols-outlined text-[22px] group-hover/btn:text-primary transition-colors">description</span>
+                                Read
+                            </button>
+</div>
+</div>
+<div class="absolute top-4 right-4 hidden md:block opacity-40">
+<div class="flex flex-col items-end gap-1">
+<span class="h-[1px] w-8 bg-ink dark:bg-white"></span>
+<span class="h-[1px] w-4 bg-ink dark:bg-white"></span>
+<span class="h-[1px] w-6 bg-ink dark:bg-white"></span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+<div class="flex items-center gap-4 mb-6">
+<h3 class="text-sm font-bold uppercase tracking-widest text-ink-light">Up Next</h3>
+<div class="h-[1px] flex-grow bg-gray-200 dark:bg-gray-700"></div>
+</div>
+<div class="bg-white dark:bg-paper-dark border border-gray-200 dark:border-gray-700 p-4 rounded-sm flex items-center gap-4 mb-3">
+<div class="w-10 h-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-ink/50 rounded-full">
+<span class="text-lg font-serif">☉</span>
+</div>
+<div>
+<h4 class="font-bold text-ink dark:text-gray-200">The Problem with Serotonin</h4>
+<p class="text-xs text-ink-light">Ep. 41 • Politics &amp; Science</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+
+</body></html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ray Peat Archive - Episode Card Variant 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f0c742",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#221e10",
+                        "ink": "#1b180d",
+                        "ink-light": "#5c5541",
+                        "paper": "#fcfbf8",
+                        "paper-dim": "#f3f0e7",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                    boxShadow: {
+                        'neobrutalist': '4px 4px 0px 0px #1b180d',
+                        'neobrutalist-sm': '2px 2px 0px 0px #1b180d',
+                        'neobrutalist-hover': '6px 6px 0px 0px #1b180d',
+                    }
+                },
+            },
+        }
+    </script>
+<style>/* Risograph Grain Effect */
+.riso-texture {
+    position: relative
+    }
+.riso-texture::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    pointer-events: none;
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuBe661pbgBY4m9IXHLf44zazd0HY9cWXZMCHYj_lNI333x0tUz4at0s_75WGZUoSkltoUhSo0l6T7Q9jyLCH-du4y0lyUVDTwbqyrZRa9qGqi4bG_mGR4Ik3PvVkE8CzRs-8G6FVxTwgLTd1MoGxd97hOg0cf-O5SJBdwIm3lD-NwZAD6qWvWDWfmAHtrYwMjsCkg1u1UGeRgQkfwJZYUlkRBoyTLZC6I4iPBI2BTh7dHNx35XgZKYcxRwqLQcD6SEkfnA92Wne6B4r);
+    z-index: 0
+    }
+.riso-content {
+    position: relative;
+    z-index: 1
+    }
+/* Stamped Border Effect */
+.dashed-divider {
+    background-image: linear-gradient(to right, #1b180d 33%, rgba(255, 255, 255, 0) 0%);
+    background-position: bottom;
+    background-size: 8px 1px;
+    background-repeat: repeat-x
+    }</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-ink flex flex-col min-h-screen">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-ink/10 px-6 lg:px-10 py-4 bg-paper dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4 text-ink dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M8.57829 8.57829C5.52816 11.6284 3.451 15.5145 2.60947 19.7452C1.76794 23.9758 2.19984 28.361 3.85056 32.3462C5.50128 36.3314 8.29667 39.7376 11.8832 42.134C15.4698 44.5305 19.6865 45.8096 24 45.8096C28.3135 45.8096 32.5302 44.5305 36.1168 42.134C39.7033 39.7375 42.4987 36.3314 44.1494 32.3462C45.8002 28.361 46.2321 23.9758 45.3905 19.7452C44.549 15.5145 42.4718 11.6284 39.4217 8.57829L24 24L8.57829 8.57829Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-ink dark:text-white text-lg font-bold leading-tight tracking-tight">Ray Peat Archive</h2>
+</div>
+<nav class="hidden md:flex items-center gap-9">
+<a class="text-ink dark:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Podcasts</a>
+<a class="text-ink dark:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Newsletters</a>
+<a class="text-ink dark:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Articles</a>
+<a class="text-ink dark:text-white hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Encyclopedia</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-ink dark:text-white">search</button>
+<button class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-ink text-sm font-bold leading-normal tracking-[0.015em] border border-ink shadow-neobrutalist-sm hover:shadow-neobrutalist hover:-translate-y-0.5 transition-all">
+<span>Login</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col items-center justify-center p-6 md:p-20 relative overflow-hidden">
+<!-- Abstract Background Shapes for context (Neobrutalist touch) -->
+<div class="absolute top-20 left-10 w-64 h-64 rounded-full border border-ink/5 dark:border-white/5 -z-10"></div>
+<div class="absolute bottom-10 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"></div>
+<div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+<!-- Context: Why this design? -->
+<div class="flex flex-col justify-center gap-4 md:pr-10">
+<h1 class="text-4xl font-bold tracking-tight text-ink dark:text-white mb-2">Generative Energy</h1>
+<p class="text-ink-light dark:text-gray-300 text-lg leading-relaxed">
+                    Explore the archive of Ray Peat's work. Listen to deep dives into biology, philosophy, and politics through a lens of bioenergetics.
+                </p>
+<div class="mt-4 flex gap-2">
+<span class="inline-flex items-center rounded-full bg-paper-dim dark:bg-white/10 px-3 py-1 text-xs font-medium text-ink-light dark:text-gray-300 ring-1 ring-inset ring-ink/10">Audio</span>
+<span class="inline-flex items-center rounded-full bg-paper-dim dark:bg-white/10 px-3 py-1 text-xs font-medium text-ink-light dark:text-gray-300 ring-1 ring-inset ring-ink/10">Transcript Available</span>
+</div>
+</div>
+<!-- The Episode Card Component (Variant 2) -->
+<div class="w-full flex justify-center">
+<!-- Card Container -->
+<article class="group/card relative w-full max-w-md bg-paper dark:bg-neutral-800 border-2 border-ink dark:border-neutral-600 rounded-lg p-0 transition-transform duration-300 hover:-translate-y-1 shadow-[8px_8px_0px_0px_rgba(27,24,13,0.1)] hover:shadow-neobrutalist riso-texture overflow-hidden">
+<div class="riso-content flex flex-col h-full">
+<!-- Card Header: Show Info & Icon -->
+<div class="flex justify-between items-start p-6 pb-4">
+<div class="flex flex-col gap-1">
+<span class="text-xs font-bold uppercase tracking-widest text-ink-light dark:text-gray-400">Politics &amp; Science</span>
+<div class="h-0.5 w-12 bg-primary mt-1"></div>
+</div>
+<div class="text-primary dark:text-primary animate-spin-slow" style="animation-duration: 10s;">
+<!-- Sun Icon SVG -->
+<svg fill="none" height="40" viewbox="0 0 40 40" width="40" xmlns="http://www.w3.org/2000/svg">
+<circle cx="20" cy="20" r="8" stroke="currentColor" stroke-width="2.5"></circle>
+<path d="M20 4V8" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M20 32V36" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M36 20L32 20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M8 20L4 20" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M31.3137 8.68629L28.4853 11.5147" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M11.5147 28.4853L8.68629 31.3137" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M31.3137 31.3137L28.4853 28.4853" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M11.5147 11.5147L8.68629 8.68629" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+</svg>
+</div>
+</div>
+<!-- Main Content: Title -->
+<div class="px-6 pb-6 flex-grow">
+<h3 class="text-3xl font-bold leading-[1.1] text-ink dark:text-white mb-4 group-hover/card:text-ink/80 dark:group-hover/card:text-white/90 transition-colors">
+                                Generative Energy &amp; The Thyroid
+                            </h3>
+<!-- Meta Data Grid -->
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-dashed border-ink/20 dark:border-white/20">
+<div>
+<p class="text-[10px] uppercase font-bold tracking-wider text-ink/40 dark:text-white/40 mb-1">Date Recorded</p>
+<p class="text-sm font-medium text-ink dark:text-gray-200 font-mono">OCT 12, 2014</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold tracking-wider text-ink/40 dark:text-white/40 mb-1">Duration</p>
+<p class="text-sm font-medium text-ink dark:text-gray-200 font-mono">54 MIN</p>
+</div>
+</div>
+</div>
+<!-- Card Footer: Actions -->
+<div class="bg-paper-dim dark:bg-neutral-900/50 border-t-2 border-ink dark:border-neutral-600 p-4 flex gap-3 items-stretch">
+<button class="flex-1 bg-primary hover:bg-[#eec02b] text-ink font-bold py-3 px-4 rounded border-2 border-ink shadow-neobrutalist-sm active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center gap-2 group/play">
+<span class="material-symbols-outlined text-[20px] group-hover/play:scale-110 transition-transform">play_circle</span>
+<span>Play Episode</span>
+</button>
+<button aria-label="Read Transcript" class="flex-none bg-transparent hover:bg-white dark:hover:bg-neutral-800 text-ink dark:text-white font-bold py-3 px-4 rounded border-2 border-ink dark:border-neutral-500 hover:shadow-neobrutalist-sm active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">description</span>
+</button>
+</div>
+</div>
+</article>
+<!-- End Episode Card -->
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="flex flex-col gap-6 px-5 py-10 text-center border-t border-ink/10 bg-paper dark:bg-background-dark">
+<div class="flex flex-wrap items-center justify-center gap-6">
+<a class="text-ink-light hover:text-primary dark:text-gray-400 transition-colors text-base font-normal leading-normal min-w-20" href="#">About</a>
+<a class="text-ink-light hover:text-primary dark:text-gray-400 transition-colors text-base font-normal leading-normal min-w-20" href="#">Contact</a>
+<a class="text-ink-light hover:text-primary dark:text-gray-400 transition-colors text-base font-normal leading-normal min-w-20" href="#">Donate</a>
+</div>
+<p class="text-ink-light dark:text-gray-500 text-sm font-normal leading-normal">© 2024 Ray Peat Archive. A project for the community.</p>
+</footer>
+</body></html>

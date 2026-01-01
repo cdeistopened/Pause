@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ray Peat Archive - Verdict Banner</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#38bdf8","primary-dark": "#0284c7",
+                        "accent-pink": "#f472b6","accent-lemon": "#fef08a","accent-teal": "#5eead4","background-light": "#fdfbf7","background-dark": "#111f21",
+                        "paper": "#ffffff",
+                        "paper-dark": "#1a2c30",
+                        "ink": "#1e293b",
+                        "ink-light": "#64748b",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    backgroundImage: {
+                        'noise': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIi8+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiNjY2MiIGZpbGwtb3BhY2l0eT0iMC4yIi8+Cjwvc3ZnPg==')",
+                        'riso-gradient': "linear-gradient(135deg, rgba(56, 189, 248, 0.05) 0%, rgba(244, 114, 182, 0.05) 100%)",
+                    },
+                    boxShadow: {
+                        'hard': '4px 4px 0px 0px rgba(0,0,0,1)',
+                        'hard-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                        'hard-white': '4px 4px 0px 0px rgba(255,255,255,1)',
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .text-outline {
+                -webkit-text-stroke: 1px currentColor;
+                color: transparent;
+            }
+            .mix-blend-multiply-dark {
+                mix-blend-mode: multiply;
+            }
+            .dark .mix-blend-multiply-dark {
+                mix-blend-mode: normal;
+            }
+            .halftone-pattern {
+                background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+                background-size: 8px 8px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased text-ink dark:text-gray-100 transition-colors duration-200 selection:bg-accent-teal selection:text-ink">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<header class="sticky top-0 z-50 w-full border-b-2 border-ink/5 dark:border-gray-800 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-sm px-6 py-4">
+<div class="max-w-[1200px] mx-auto flex items-center justify-between">
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-3 text-ink dark:text-white group" href="#">
+<div class="size-8 bg-primary text-white flex items-center justify-center rounded-sm border border-ink dark:border-transparent shadow-hard-sm dark:shadow-none transition-transform group-hover:-translate-y-0.5">
+<span class="material-symbols-outlined text-[20px] font-bold">library_books</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight uppercase group-hover:text-primary-dark transition-colors">Ray Peat Archive</h1>
+</a>
+<nav class="hidden md:flex items-center gap-6 ml-4">
+<a class="text-sm font-medium hover:text-primary-dark transition-colors" href="#">Podcasts</a>
+<a class="text-sm font-medium hover:text-primary-dark transition-colors" href="#">Newsletters</a>
+<a class="text-sm font-medium hover:text-primary-dark transition-colors" href="#">Articles</a>
+<a class="text-sm font-medium text-primary-dark border-b-2 border-primary-dark" href="#">Encyclopedia</a>
+<a class="text-sm font-medium hover:text-primary-dark transition-colors" href="#">Q&amp;A</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex relative group">
+<input class="w-64 bg-white dark:bg-gray-800 border-2 border-ink/10 dark:border-gray-700 rounded-sm px-4 py-2 pl-10 text-sm focus:ring-0 focus:border-primary placeholder-ink-light dark:placeholder-gray-500 text-ink dark:text-white transition-all shadow-sm" placeholder="Search archive..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-ink-light dark:text-gray-500 text-[18px]">search</span>
+</div>
+<button class="md:hidden text-ink dark:text-white">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-grow px-6 py-8 md:py-12">
+<div class="max-w-[1050px] mx-auto flex flex-col gap-10">
+<nav class="flex flex-wrap items-center gap-2 text-xs font-bold font-mono text-ink-light dark:text-gray-400 uppercase tracking-wider">
+<a class="hover:text-primary-dark hover:underline decoration-2 underline-offset-4" href="#">ARCHIVE</a>
+<span class="material-symbols-outlined text-[12px] opacity-50">chevron_right</span>
+<a class="hover:text-primary-dark hover:underline decoration-2 underline-offset-4" href="#">SUBSTANCES</a>
+<span class="material-symbols-outlined text-[12px] opacity-50">chevron_right</span>
+<span class="bg-accent-teal/20 text-teal-800 dark:text-teal-200 px-2 py-0.5 rounded-sm border border-accent-teal/30">ASPIRIN</span>
+</nav>
+<section class="relative w-full group perspective-1000">
+<div class="absolute top-3 left-3 w-full h-full bg-gradient-to-br from-accent-teal to-accent-pink rounded-sm -z-20 border-2 border-ink dark:border-gray-600 opacity-90 transition-transform duration-500 group-hover:translate-x-1 group-hover:translate-y-1"></div>
+<div class="absolute top-1.5 left-1.5 w-full h-full bg-white dark:bg-gray-800 border-2 border-ink dark:border-gray-600 rounded-sm -z-10"></div>
+<div class="relative bg-white dark:bg-paper-dark border-2 border-ink dark:border-gray-500 rounded-sm overflow-hidden flex flex-col md:flex-row shadow-sm">
+<div class="absolute inset-0 bg-noise opacity-[0.03] mix-blend-multiply pointer-events-none z-0"></div>
+<div class="flex-1 p-8 md:p-10 flex flex-col justify-between relative z-10">
+<div class="absolute top-0 left-0 w-2/3 h-full bg-gradient-to-r from-accent-teal/5 to-transparent pointer-events-none -z-10"></div>
+<div class="space-y-6">
+<div class="flex items-center gap-3">
+<span class="font-mono text-[10px] font-bold uppercase tracking-widest text-ink/60 dark:text-gray-400 border border-ink/20 dark:border-gray-600 px-2 py-0.5 bg-white dark:bg-gray-800">
+                                        Substance File
+                                    </span>
+<span class="font-mono text-[10px] font-bold uppercase tracking-widest text-primary-dark dark:text-primary">
+                                        #0492 // BIO-ENERGETIC
+                                    </span>
+</div>
+<div class="relative">
+<h1 aria-hidden="true" class="absolute top-1 left-1 text-5xl md:text-6xl font-black uppercase leading-[0.85] tracking-tight text-accent-pink/20 select-none pointer-events-none">
+                                        Aspirin
+                                    </h1>
+<h1 class="relative text-5xl md:text-6xl font-black uppercase leading-[0.85] tracking-tight text-ink dark:text-white mix-blend-hard-light">
+                                        Aspirin
+                                        <span class="block text-2xl md:text-3xl font-bold tracking-normal normal-case text-ink-light dark:text-gray-400 mt-2">
+                                            (Acetylsalicylic acid)
+                                        </span>
+</h1>
+</div>
+<p class="text-lg md:text-xl text-ink/90 dark:text-gray-200 font-medium leading-relaxed max-w-xl border-l-[3px] border-accent-pink pl-5 py-1">
+                                    Supports mitochondrial respiration and reduces systemic inflammation by uncoupling oxidative phosphorylation.
+                                </p>
+</div>
+<div class="mt-8 pt-6 border-t border-dashed border-gray-300 dark:border-gray-700 flex flex-wrap gap-6 text-xs font-mono text-gray-500 uppercase tracking-wider">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                                    Last Check: Oct 24, 2023
+                                </span>
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                                    Source: R. Peat
+                                </span>
+</div>
+</div>
+<div class="relative w-full md:w-[320px] bg-background-light dark:bg-[#152326] border-t-2 md:border-t-0 md:border-l-2 border-ink dark:border-gray-500 flex flex-col items-center justify-center p-8 overflow-hidden">
+<div class="absolute inset-0 text-ink/5 dark:text-white/5 halftone-pattern"></div>
+<div class="relative transform md:rotate-2 hover:rotate-0 transition-transform duration-300 ease-out z-20">
+<div class="absolute inset-0 translate-x-2 translate-y-2 bg-ink/20 dark:bg-black/50 rounded-sm"></div>
+<div class="relative bg-white dark:bg-gray-800 border-2 border-ink dark:border-gray-400 p-6 w-[220px] flex flex-col items-center shadow-sm">
+<div class="w-3 h-3 rounded-full bg-background-light dark:bg-[#152326] border border-ink/20 absolute -top-1.5 left-1/2 -translate-x-1/2"></div>
+<div class="text-[10px] font-black tracking-[0.3em] uppercase text-ink-light/70 dark:text-gray-500 mb-3 border-b border-gray-200 dark:border-gray-600 pb-2 w-full text-center">
+                                        Official Verdict
+                                    </div>
+<div class="flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-6xl text-primary font-bold drop-shadow-sm">check_circle</span>
+</div>
+<div class="text-5xl font-black uppercase tracking-tighter text-ink dark:text-white leading-none mb-2">
+                                        YES
+                                    </div>
+<div class="w-full bg-accent-teal/20 border border-accent-teal/40 rounded-sm py-1 px-2 text-center">
+<span class="text-[10px] font-bold uppercase tracking-widest text-teal-800 dark:text-teal-200">
+                                            Recommended
+                                        </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 pt-4">
+<div class="md:col-span-2 space-y-8">
+<div class="prose prose-lg dark:prose-invert max-w-none font-body text-ink dark:text-gray-300">
+<h3 class="text-2xl font-bold font-display uppercase tracking-tight text-ink dark:text-white mb-4 border-b-2 border-accent-lemon inline-block">Mechanism of Action</h3>
+<p class="leading-relaxed">
+                                Aspirin (acetylsalicylic acid) acts primarily as an anti-inflammatory agent by inhibiting the production of prostaglandins. In the context of bioenergetics, its value lies in its ability to safely uncouple mitochondrial respiration, thereby increasing metabolic rate and carbon dioxide production.
+                            </p>
+<p class="leading-relaxed mt-4">
+                                Furthermore, its antagonism of estrogen synthesis makes it a critical tool for managing conditions exacerbated by estrogen dominance.
+                            </p>
+</div>
+<div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
+<h4 class="text-xs font-bold uppercase tracking-widest text-ink-light dark:text-gray-400 mb-6">Related References</h4>
+<div class="grid gap-4">
+<a class="group flex items-center gap-4 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary transition-colors rounded-sm shadow-sm" href="#">
+<div class="size-10 bg-primary/10 text-primary flex items-center justify-center rounded-full shrink-0">
+<span class="material-symbols-outlined">article</span>
+</div>
+<div>
+<p class="font-bold text-ink dark:text-gray-200 group-hover:text-primary transition-colors font-display">Aspirin, Brain, and Cancer</p>
+<p class="text-xs font-mono text-ink-light dark:text-gray-500 mt-0.5">Ray Peat Newsletter • 2012</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-gray-300 group-hover:text-primary">arrow_forward</span>
+</a>
+<a class="group flex items-center gap-4 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary transition-colors rounded-sm shadow-sm" href="#">
+<div class="size-10 bg-accent-pink/10 text-accent-pink flex items-center justify-center rounded-full shrink-0">
+<span class="material-symbols-outlined">mic</span>
+</div>
+<div>
+<p class="font-bold text-ink dark:text-gray-200 group-hover:text-accent-pink transition-colors font-display">Podcast: Protective Substances</p>
+<p class="text-xs font-mono text-ink-light dark:text-gray-500 mt-0.5">Generative Energy • 2018</p>
+</div>
+<span class="material-symbols-outlined ml-auto text-gray-300 group-hover:text-accent-pink">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<aside class="space-y-6">
+<div class="bg-white dark:bg-[#1a2c30] p-6 rounded-sm border-2 border-ink/10 dark:border-gray-700 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.05)] dark:shadow-none">
+<h4 class="text-xs font-bold uppercase tracking-widest text-ink-light dark:text-gray-400 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">science</span>
+                                Properties
+                            </h4>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1.5 bg-background-light dark:bg-gray-800 text-xs font-bold text-ink dark:text-gray-300 rounded-sm border border-gray-200 dark:border-gray-600">Anti-inflammatory</span>
+<span class="px-3 py-1.5 bg-background-light dark:bg-gray-800 text-xs font-bold text-ink dark:text-gray-300 rounded-sm border border-gray-200 dark:border-gray-600">Anti-estrogenic</span>
+<span class="px-3 py-1.5 bg-background-light dark:bg-gray-800 text-xs font-bold text-ink dark:text-gray-300 rounded-sm border border-gray-200 dark:border-gray-600">Uncoupler</span>
+</div>
+</div>
+<div class="bg-accent-lemon/20 dark:bg-yellow-900/20 p-6 rounded-sm border-2 border-accent-lemon/50 border-dashed relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#000_10px,#000_20px)] opacity-10"></div>
+<h4 class="text-xs font-bold uppercase tracking-widest text-yellow-700 dark:text-yellow-500 mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+                                Caution
+                            </h4>
+<p class="text-sm font-medium text-ink dark:text-gray-400 leading-snug">
+                                Ensure adequate Vitamin K intake when using regularly to prevent bleeding issues.
+                            </p>
+</div>
+</aside>
+</section>
+</div>
+</main>
+</div>
+
+</body></html>
