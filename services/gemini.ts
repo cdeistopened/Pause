@@ -2,7 +2,7 @@
  * Gemini LLM Service for Voice Coach
  *
  * Handles all LLM calls for the Dr. Miller voice coach feature.
- * Uses Gemini 2.0 Flash (gemini-2.0-flash) for fast inference.
+ * Uses Gemini 3 Flash (gemini-3.0-flash) for fast inference.
  */
 
 // Types
@@ -188,7 +188,7 @@ export async function getCoachResponse(
   ];
 
   // Gemini API endpoint
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-flash:generateContent?key=${apiKey}`;
 
   const requestBody = {
     contents: messages.map(m => ({

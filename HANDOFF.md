@@ -23,7 +23,7 @@ npx convex dev           # Start Convex backend (separate terminal)
 | PAUSE home screen | ✅ | TRUE radial layout, 5 exercises around orb |
 | Golden orb | ✅ | Breathing animation, size prop |
 | Floating tab bar | ✅ | Pill-shaped, icon-only |
-| Voice coach | ✅ | Gemini 2.0 Flash + ElevenLabs TTS |
+| Voice coach | ✅ | Gemini 3 Flash + ElevenLabs TTS |
 | Progress/Habits | ✅ | Dot grid (best looking screen) |
 | Settings | ✅ | Basic settings, needs polish |
 | Library | ⚠️ | Functional, needs Stitch design polish |
@@ -82,7 +82,7 @@ components/pause/
 ├── ActiveSession.tsx    # During-pause timer
 └── IntentionScreen.tsx  # Post-pause capture
 services/
-├── gemini.ts            # LLM coach (Gemini 2.0 Flash)
+├── gemini.ts            # LLM coach (Gemini 3 Flash)
 └── elevenlabs.ts        # TTS (Dr. Miller voice)
 ```
 
