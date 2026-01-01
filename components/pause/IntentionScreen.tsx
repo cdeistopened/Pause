@@ -2,7 +2,8 @@ import { View, Text, TextInput, Pressable, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check, ArrowRight } from 'lucide-react-native';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import * as Haptics from 'expo-haptics';
 
 interface IntentionScreenProps {
   onComplete: (intention: string) => void;
@@ -13,6 +14,26 @@ export function IntentionScreen({ onComplete, onSkip }: IntentionScreenProps) {
   const [intention, setIntention] = useState('');
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const glowAnim = useRef(new Animated.Value(0.2)).current;
+
+  // Input validation: trim whitespace, max 500 characters
+  const sanitizedIntention = intention.trim().slice(0, 500);
+  const hasIntention = sanitizedIntention.length > 0;
+
+  const handleComplete = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // Only submit if there's actual content
+    if (hasIntention) {
+      onComplete(sanitizedIntention);
+    } else {
+      // Treat empty intention as skip
+      onSkip();
+    }
+  }, [hasIntention, sanitizedIntention, onComplete, onSkip]);
+
+  const handleSkip = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    onSkip();
+  }, [onSkip]);
 
   useEffect(() => {
     // Pulsing glow animation
@@ -114,11 +135,14 @@ export function IntentionScreen({ onComplete, onSkip }: IntentionScreenProps) {
               numberOfLines={3}
               textAlignVertical="top"
               autoFocus
+              maxLength={500}
+              accessibilityLabel="Enter your intention"
+              accessibilityHint="What will you carry forward from this pause?"
               style={{
                 minHeight: 100,
                 shadowColor: '#d4a954',
                 shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: intention ? 0.15 : 0,
+                shadowOpacity: hasIntention ? 0.15 : 0,
                 shadowRadius: 25,
               }}
             />
@@ -128,7 +152,9 @@ export function IntentionScreen({ onComplete, onSkip }: IntentionScreenProps) {
           <View className="w-full items-center gap-6 mt-8">
             <Pressable
               className="w-full rounded-full overflow-hidden active:scale-[0.98]"
-              onPress={() => onComplete(intention)}
+              onPress={handleComplete}
+              accessibilityLabel={hasIntention ? "Save intention and continue" : "Continue without intention"}
+              accessibilityRole="button"
               style={{
                 shadowColor: '#d4a954',
                 shadowOffset: { width: 0, height: 0 },
@@ -151,7 +177,9 @@ export function IntentionScreen({ onComplete, onSkip }: IntentionScreenProps) {
 
             <Pressable
               className="flex-row items-center gap-2 py-2"
-              onPress={onSkip}
+              onPress={handleSkip}
+              accessibilityLabel="Skip setting intention"
+              accessibilityRole="button"
             >
               <Text className="text-primary/90 text-base font-semibold">
                 Skip

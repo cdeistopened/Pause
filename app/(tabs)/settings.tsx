@@ -1,7 +1,9 @@
 import { View, Text, ScrollView, Pressable, Switch, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
 import { ChevronRight, Plus, ExternalLink } from 'lucide-react-native';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import * as Haptics from 'expo-haptics';
 
 const USER_HABITS = [
   { id: 'breathing', name: 'Breathing', icon: '🌬️', reminderSummary: '10x daily' },
@@ -10,8 +12,23 @@ const USER_HABITS = [
 ];
 
 export default function SettingsScreen() {
-  const [hapticEnabled, setHapticEnabled] = useState(true);
-  const subscriptionTier = 'free';
+  // Backend queries and mutations
+  const user = useQuery(api.users.getCurrent);
+  const updatePreferences = useMutation(api.users.updatePreferences);
+
+  const hapticEnabled = user?.hapticEnabled ?? true;
+  const subscriptionTier = user?.subscriptionTier ?? 'free';
+
+  const toggleHaptic = async () => {
+    const newValue = !hapticEnabled;
+    // Provide haptic feedback before disabling (ironic but useful UX)
+    if (!newValue) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+    } else {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+    await updatePreferences({ hapticEnabled: newValue });
+  };
 
   const openBookingLink = () => {
     Linking.openURL('https://calendly.com/dr-miller/consultation');
@@ -84,7 +101,7 @@ export default function SettingsScreen() {
               <Text className="text-text-primary text-base">Haptics</Text>
               <Switch
                 value={hapticEnabled}
-                onValueChange={setHapticEnabled}
+                onValueChange={toggleHaptic}
                 trackColor={{ false: '#1F2937', true: '#d4a954' }}
                 thumbColor="#F0F4F8"
               />
@@ -99,9 +116,18 @@ export default function SettingsScreen() {
             <Pressable className="flex-row items-center justify-between p-4">
               <Text className="text-text-primary text-base">Subscription</Text>
               <View className="flex-row items-center">
-                <Text className="text-text-secondary text-base mr-2">Free</Text>
-                <Text className="text-primary font-medium mr-1">Upgrade</Text>
-                <ChevronRight size={20} color="#d4a954" />
+                <Text className="text-text-secondary text-base mr-2 capitalize">
+                  {subscriptionTier}
+                </Text>
+                {subscriptionTier === 'free' && (
+                  <>
+                    <Text className="text-primary font-medium mr-1">Upgrade</Text>
+                    <ChevronRight size={20} color="#d4a954" />
+                  </>
+                )}
+                {subscriptionTier === 'premium' && (
+                  <ChevronRight size={20} color="#5A6B7D" />
+                )}
               </View>
             </Pressable>
             <View className="h-px bg-white/10 ml-4" />
