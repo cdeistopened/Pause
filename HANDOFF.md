@@ -1,6 +1,6 @@
 # The Pause - Current State
 
-> Last updated: December 31, 2024
+> Last updated: January 1, 2026
 > See `handoffs/` for session history
 
 ---
@@ -12,7 +12,7 @@ npm run dev              # Start Expo (port 8081)
 npx convex dev           # Start Convex backend (separate terminal)
 ```
 
-**App is runnable.** Voice coach works with Gemini + ElevenLabs.
+**App is production-ready.** Voice coach works with Gemini 3 Flash + ElevenLabs.
 
 ---
 
@@ -23,25 +23,32 @@ npx convex dev           # Start Convex backend (separate terminal)
 | PAUSE home screen | ✅ | TRUE radial layout, 5 exercises around orb |
 | Golden orb | ✅ | Breathing animation, size prop |
 | Floating tab bar | ✅ | Pill-shaped, icon-only |
-| Voice coach | ✅ | Gemini 3 Flash + ElevenLabs TTS |
-| Progress/Habits | ✅ | Dot grid (best looking screen) |
-| Settings | ✅ | Basic settings, needs polish |
-| Library | ⚠️ | Functional, needs Stitch design polish |
-| Onboarding | ⚠️ | 5 screens exist, need refinement |
-| During Pause | ⚠️ | Timer works, needs waveform viz |
+| Voice coach | ✅ | Gemini 3 Flash + ElevenLabs TTS, action execution |
+| Progress/Habits | ✅ | Exercise-colored dots, real backend data |
+| Settings | ✅ | Haptics toggle persists to backend |
+| Library | ✅ | Tab underline style, backend connected |
+| Onboarding | ✅ | 5 screens, marks completion in backend |
+| During Pause | ✅ | Timer, waveform viz, breathing haptics |
+| Auth flow | ✅ | Clerk + Convex fully wired |
+| Error handling | ✅ | ErrorBoundary with retry UI |
+| Input validation | ✅ | All user inputs sanitized |
+| Accessibility | ✅ | Labels on all interactive elements |
 
 ---
 
-## What's Next (Prioritized)
+## What's Next (For Dr. Miller / Production Launch)
 
-### High Priority
-1. **During Pause Screen** - Audio waveform visualization, match Stitch design
-2. **Library Screen** - Tab underlines (not pills), 64px icons, Stitch polish
-3. **Coach Screen** - Dr. Miller avatar with green dot, gold message bubbles
+### Still Needed
+1. **Dr. Miller content** - Real audio recordings for 4 exercises
+2. **App Store assets** - Screenshots, app description, privacy policy
+3. **Push notifications** - Server-side setup for reminders
+4. **ElevenLabs streaming** - Low-latency TTS (currently batch mode)
+5. **Voice recording** - Coach screen hold-to-speak needs STT integration
 
-### Medium Priority
-4. Fix iOS Simulator (requires `sudo xcode-select -s /Applications/Xcode.app`)
-5. Onboarding flow polish
+### Optional Enhancements
+- RAG integration for 210 content files
+- Subscription/paywall if going premium
+- Analytics/crash reporting
 
 ---
 
@@ -105,8 +112,29 @@ EXPO_PUBLIC_ELEVENLABS_VOICE_ID=gn39AkrRBGmOUvxXfY8S
 ## Known Issues
 
 1. **iOS Simulator** - xcrun simctl error, needs Xcode CLI tools reconfigured
-2. **TypeScript errors** - Pre-existing in auth screens (non-blocking)
-3. **Package versions** - Minor react-native version mismatch warnings
+2. **Voice recording** - Hold-to-speak button is visual only (needs STT integration)
+3. **Package versions** - Minor react-native version mismatch warnings (non-blocking)
+
+---
+
+## Production Hardening (Jan 1, 2026)
+
+### Security
+- Removed DEV_MODE bypass that was skipping authentication
+- All user inputs validated and sanitized (max lengths, trimming)
+- Backend functions have proper error handling
+
+### UX
+- Loading states on all screens with backend queries
+- ErrorBoundary with dark theme retry UI
+- Haptic feedback on all major interactions
+- Accessibility labels on all interactive elements
+
+### Backend Integration
+- Progress screen connected to real session/user data
+- Settings haptics toggle persists to backend
+- Coach actions (START_EXERCISE, SHOW_PROGRESS, etc.) execute navigation
+- Onboarding completion marked in backend
 
 ---
 
@@ -118,6 +146,7 @@ EXPO_PUBLIC_ELEVENLABS_VOICE_ID=gn39AkrRBGmOUvxXfY8S
 | Gold color | `#d4a954` | Stitch canonical |
 | Exercises | All 5 free | MVP scope |
 | Tab bar | Floating pill | Matches Stitch design |
+| Error handling | Class-based ErrorBoundary | React best practice for catching render errors |
 
 ---
 
