@@ -4,6 +4,9 @@ import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check, Sparkles, Clock, BarChart3, ArrowRight } from 'lucide-react-native';
 import { useEffect, useRef } from 'react';
+import { useMutation } from 'convex/react';
+import { api } from '@/convex/_generated/api';
+import * as Haptics from 'expo-haptics';
 
 const TIPS = [
   { icon: Sparkles, text: 'Start with just 60 seconds' },
@@ -14,6 +17,7 @@ const TIPS = [
 export default function ReadyScreen() {
   const router = useRouter();
   const pulseAnim = useRef(new Animated.Value(1)).current;
+  const completeOnboarding = useMutation(api.users.completeOnboarding);
 
   // Subtle pulse animation for the check icon
   useEffect(() => {
@@ -35,8 +39,13 @@ export default function ReadyScreen() {
     return () => animation.stop();
   }, [pulseAnim]);
 
-  const handleStart = () => {
-    // TODO: Mark onboarding complete in storage
+  const handleStart = async () => {
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    try {
+      await completeOnboarding();
+    } catch (e) {
+      console.log('Failed to mark onboarding complete:', e);
+    }
     router.replace('/(tabs)');
   };
 
@@ -108,6 +117,8 @@ export default function ReadyScreen() {
           <Pressable
             className="rounded-2xl overflow-hidden active:opacity-90 active:scale-[0.98]"
             onPress={handleStart}
+            accessibilityLabel="Begin your mindfulness practice"
+            accessibilityRole="button"
           >
             <LinearGradient
               colors={['#d4a954', '#b8923f']}
