@@ -28,6 +28,15 @@ module.exports = {
       },
       fontFamily: {
         display: ["Manrope", "sans-serif"],
+        serif: ["Playfair Display", "serif"],
+      },
+      borderRadius: {
+        DEFAULT: "1rem",
+        lg: "1.5rem",
+        xl: "2rem",
+        "2xl": "1.5rem",
+        "3xl": "2rem",
+        full: "9999px",
       },
       animation: {
         "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",

@@ -1,9 +1,29 @@
-import { View, Text, TextInput, Pressable, Animated } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, TextInput, Pressable, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Check, ArrowRight } from 'lucide-react-native';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  withSequence,
+  Easing,
+  FadeIn,
+  FadeInUp,
+} from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+
+const COLORS = {
+  primary: '#EBB305',
+  primaryLight: '#FCD34D',
+  background: '#0A0E1A',
+  inputBg: '#1F2937',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#D1D5DB',
+  textMuted: '#9CA3AF',
+};
 
 interface IntentionScreenProps {
   onComplete: (intention: string) => void;
@@ -12,20 +32,43 @@ interface IntentionScreenProps {
 
 export function IntentionScreen({ onComplete, onSkip }: IntentionScreenProps) {
   const [intention, setIntention] = useState('');
-  const pulseAnim = useRef(new Animated.Value(1)).current;
-  const glowAnim = useRef(new Animated.Value(0.2)).current;
+  const glowScale = useSharedValue(1);
+  const glowOpacity = useSharedValue(0.2);
 
-  // Input validation: trim whitespace, max 500 characters
   const sanitizedIntention = intention.trim().slice(0, 500);
   const hasIntention = sanitizedIntention.length > 0;
 
+  useEffect(() => {
+    // Pulsing glow animation
+    glowScale.value = withRepeat(
+      withSequence(
+        withTiming(1.1, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1, { duration: 1500, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      false
+    );
+
+    glowOpacity.value = withRepeat(
+      withSequence(
+        withTiming(0.4, { duration: 1500, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.2, { duration: 1500, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      false
+    );
+  }, [glowScale, glowOpacity]);
+
+  const glowStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: glowScale.value }],
+    opacity: glowOpacity.value,
+  }));
+
   const handleComplete = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // Only submit if there's actual content
     if (hasIntention) {
       onComplete(sanitizedIntention);
     } else {
-      // Treat empty intention as skip
       onSkip();
     }
   }, [hasIntention, sanitizedIntention, onComplete, onSkip]);
@@ -35,160 +78,207 @@ export function IntentionScreen({ onComplete, onSkip }: IntentionScreenProps) {
     onSkip();
   }, [onSkip]);
 
-  useEffect(() => {
-    // Pulsing glow animation
-    const pulseAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    const glowAnimation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(glowAnim, {
-          toValue: 0.4,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(glowAnim, {
-          toValue: 0.2,
-          duration: 1500,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-
-    pulseAnimation.start();
-    glowAnimation.start();
-
-    return () => {
-      pulseAnimation.stop();
-      glowAnimation.stop();
-    };
-  }, []);
-
   return (
-    <View className="flex-1 bg-background-dark">
-      {/* Background */}
-      <LinearGradient
-        colors={['#1a2a3a', '#0A0E1A', '#0A0E1A']}
-        locations={[0, 0.4, 1]}
-        className="absolute inset-0"
-      />
-
-      <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
-        <View className="flex-1 items-center justify-between px-6 pt-16 pb-8">
-          {/* Success Icon */}
-          <View className="flex-1 items-center justify-center">
-            <View className="relative items-center justify-center mb-10">
-              {/* Glow */}
-              <Animated.View
-                style={{
-                  transform: [{ scale: pulseAnim }],
-                  opacity: glowAnim,
-                }}
-                className="absolute w-32 h-32 rounded-full bg-primary blur-2xl"
-              />
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardView}
+        >
+          {/* Success Icon Section */}
+          <Animated.View
+            entering={FadeIn.duration(600)}
+            style={styles.successSection}
+          >
+            <View style={styles.checkContainer}>
+              {/* Pulsing glow */}
+              <Animated.View style={[styles.checkGlow, glowStyle]} />
 
               {/* Check circle */}
-              <View
-                className="w-24 h-24 rounded-full border-[3px] border-primary/40 bg-background-dark/50 items-center justify-center"
-                style={{
-                  shadowColor: '#d4a954',
-                  shadowOffset: { width: 0, height: 0 },
-                  shadowOpacity: 0.25,
-                  shadowRadius: 25,
-                  elevation: 10,
-                }}
-              >
-                <Check size={48} color="#d4a954" strokeWidth={3} />
+              <View style={styles.checkCircle}>
+                <Check size={48} color={COLORS.primary} strokeWidth={3} />
               </View>
             </View>
 
-            <Text className="text-text-primary text-4xl font-bold tracking-tight text-center mb-3">
-              Pause complete
-            </Text>
-          </View>
+            <Text style={styles.headline}>Pause complete</Text>
+          </Animated.View>
 
-          {/* Intention Input */}
-          <View className="w-full mb-auto">
-            <Text className="text-gray-300 text-xl font-medium text-center mb-6 leading-relaxed">
-              What will you carry forward?
-            </Text>
+          {/* Intention Input Section */}
+          <Animated.View
+            entering={FadeInUp.delay(100).duration(600)}
+            style={styles.inputSection}
+          >
+            <Text style={styles.prompt}>What will you carry forward?</Text>
 
-            <TextInput
-              className="w-full bg-surface-dark text-text-primary rounded-3xl border border-white/10 text-xl px-6 py-5"
-              placeholder="Type your intention..."
-              placeholderTextColor="rgba(255, 255, 255, 0.4)"
-              value={intention}
-              onChangeText={setIntention}
-              multiline
-              numberOfLines={3}
-              textAlignVertical="top"
-              autoFocus
-              maxLength={500}
-              accessibilityLabel="Enter your intention"
-              accessibilityHint="What will you carry forward from this pause?"
-              style={{
-                minHeight: 100,
-                shadowColor: '#d4a954',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: hasIntention ? 0.15 : 0,
-                shadowRadius: 25,
-              }}
-            />
-          </View>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                style={[
+                  styles.textInput,
+                  hasIntention && styles.textInputActive,
+                ]}
+                placeholder="Type your intention..."
+                placeholderTextColor={`${COLORS.textMuted}B3`}
+                value={intention}
+                onChangeText={setIntention}
+                multiline
+                textAlignVertical="top"
+                autoFocus
+                maxLength={500}
+              />
+            </View>
+          </Animated.View>
 
-          {/* Actions */}
-          <View className="w-full items-center gap-6 mt-8">
+          {/* Actions Section */}
+          <Animated.View
+            entering={FadeInUp.delay(200).duration(600)}
+            style={styles.actionsSection}
+          >
             <Pressable
-              className="w-full rounded-full overflow-hidden active:scale-[0.98]"
+              style={({ pressed }) => [
+                styles.doneButton,
+                pressed && styles.doneButtonPressed,
+              ]}
               onPress={handleComplete}
-              accessibilityLabel={hasIntention ? "Save intention and continue" : "Continue without intention"}
-              accessibilityRole="button"
-              style={{
-                shadowColor: '#d4a954',
-                shadowOffset: { width: 0, height: 0 },
-                shadowOpacity: 0.3,
-                shadowRadius: 15,
-                elevation: 8,
-              }}
             >
-              <LinearGradient
-                colors={['#d4a954', '#b8923f']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                className="h-[60px] items-center justify-center"
-              >
-                <Text className="text-background-dark text-lg font-extrabold tracking-wide uppercase">
-                  Done
-                </Text>
-              </LinearGradient>
+              <Text style={styles.doneButtonText}>Done</Text>
             </Pressable>
 
-            <Pressable
-              className="flex-row items-center gap-2 py-2"
-              onPress={handleSkip}
-              accessibilityLabel="Skip setting intention"
-              accessibilityRole="button"
-            >
-              <Text className="text-primary/90 text-base font-semibold">
-                Skip
-              </Text>
-              <ArrowRight size={18} color="#d4a954" strokeWidth={2} />
+            <Pressable style={styles.skipButton} onPress={handleSkip}>
+              <Text style={styles.skipText}>Skip</Text>
+              <ArrowRight size={18} color={`${COLORS.primary}E6`} />
             </Pressable>
-          </View>
-        </View>
+          </Animated.View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  keyboardView: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 64,
+    paddingBottom: 32,
+    justifyContent: 'space-between',
+  },
+  successSection: {
+    alignItems: 'center',
+  },
+  checkContainer: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  checkGlow: {
+    position: 'absolute',
+    width: 128,
+    height: 128,
+    borderRadius: 64,
+    backgroundColor: COLORS.primary,
+  },
+  checkCircle: {
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: `${COLORS.background}80`,
+    borderWidth: 3,
+    borderColor: `${COLORS.primary}66`,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+  },
+  headline: {
+    fontSize: 36,
+    fontWeight: '700',
+    color: COLORS.textPrimary,
+    letterSpacing: -0.5,
+    textAlign: 'center',
+  },
+  inputSection: {
+    flex: 1,
+    marginTop: 16,
+  },
+  prompt: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: COLORS.textSecondary,
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 28,
+  },
+  inputWrapper: {
+    position: 'relative',
+  },
+  textInput: {
+    backgroundColor: COLORS.inputBg,
+    borderRadius: 24,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
+    fontSize: 20,
+    color: COLORS.textPrimary,
+    minHeight: 120,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+  },
+  textInputActive: {
+    borderColor: COLORS.primary,
+    shadowColor: COLORS.primary,
+    shadowOpacity: 0.15,
+    shadowRadius: 25,
+  },
+  actionsSection: {
+    alignItems: 'center',
+    gap: 24,
+    marginTop: 32,
+  },
+  doneButton: {
+    width: '100%',
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+  },
+  doneButtonPressed: {
+    transform: [{ scale: 0.98 }],
+    opacity: 0.95,
+  },
+  doneButtonText: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: COLORS.background,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  skipButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 8,
+  },
+  skipText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: `${COLORS.primary}E6`,
+  },
+});

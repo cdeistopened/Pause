@@ -1,5 +1,4 @@
-import { View, Pressable } from 'react-native';
-import { Pause } from 'lucide-react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,9 +8,10 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const GOLD = '#d4a954';
-const GOLD_LIGHT = '#e8c87e';
+const GOLD_LIGHT = '#f3d08c';
 
 interface GoldenOrbProps {
   size?: number;
@@ -20,125 +20,152 @@ interface GoldenOrbProps {
   isActive?: boolean;
 }
 
-export function GoldenOrb({ size = 160, onPress, onLongPress, isActive = false }: GoldenOrbProps) {
+export function GoldenOrb({ size = 192, onPress, onLongPress, isActive = false }: GoldenOrbProps) {
   const pulseScale = useSharedValue(1);
-  const glowOpacity = useSharedValue(0.3);
+  const glowOpacity = useSharedValue(0.4);
 
-  // Derived sizes based on main orb size
-  const glowSize = size * 1.4;
-  const middleGlowSize = size * 1.2;
-  const innerSize = size * 0.82;
-  const highlightWidth = size * 0.36;
-  const highlightHeight = size * 0.22;
+  // Derived sizes
+  const outerGlowSize = size * 1.67; // 320px for 192px orb
+  const innerGlowSize = size * 1.25;
 
   useEffect(() => {
-    // Breathing animation: scale 1.0 → 1.08 (per Stitch design)
+    // Breathing animation: scale 1.0 → 1.05
     pulseScale.value = withRepeat(
       withSequence(
-        withTiming(1.08, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
-        withTiming(1, { duration: 2500, easing: Easing.inOut(Easing.ease) })
+        withTiming(1.05, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.ease) })
       ),
       -1,
       false
     );
 
+    // Glow opacity animation
     glowOpacity.value = withRepeat(
       withSequence(
-        withTiming(0.6, { duration: 2500, easing: Easing.inOut(Easing.ease) }),
-        withTiming(0.3, { duration: 2500, easing: Easing.inOut(Easing.ease) })
+        withTiming(0.7, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0.4, { duration: 3000, easing: Easing.inOut(Easing.ease) })
       ),
       -1,
       false
     );
-  }, []);
+  }, [pulseScale, glowOpacity]);
+
+  const animatedOrbStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: pulseScale.value }],
+  }));
 
   const animatedGlowStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: pulseScale.value }],
     opacity: glowOpacity.value,
   }));
 
   return (
-    <View
-      style={{
-        width: glowSize,
-        height: glowSize,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {/* Outer glow ring */}
+    <View style={[styles.container, { width: outerGlowSize, height: outerGlowSize }]}>
+      {/* Large outer glow - blurred radial gradient effect */}
       <Animated.View
         style={[
+          styles.outerGlow,
           animatedGlowStyle,
-          {
-            position: 'absolute',
-            width: glowSize,
-            height: glowSize,
-            borderRadius: glowSize / 2,
-            backgroundColor: 'rgba(212, 169, 84, 0.25)',
-          },
+          { width: outerGlowSize, height: outerGlowSize, borderRadius: outerGlowSize / 2 },
         ]}
       />
 
-      {/* Middle glow */}
+      {/* Inner glow ring */}
       <View
-        style={{
-          position: 'absolute',
-          width: middleGlowSize,
-          height: middleGlowSize,
-          borderRadius: middleGlowSize / 2,
-          backgroundColor: 'rgba(212, 169, 84, 0.15)',
-        }}
+        style={[
+          styles.innerGlow,
+          { width: innerGlowSize, height: innerGlowSize, borderRadius: innerGlowSize / 2 },
+        ]}
       />
 
-      {/* Main orb */}
+      {/* Main orb with gradient */}
       <Pressable
         onPress={onPress}
         onLongPress={onLongPress}
         delayLongPress={300}
-        style={{
-          width: size,
-          height: size,
-          borderRadius: size / 2,
-          backgroundColor: GOLD,
-          alignItems: 'center',
-          justifyContent: 'center',
-          shadowColor: GOLD,
-          shadowOffset: { width: 0, height: 0 },
-          shadowOpacity: 0.7,
-          shadowRadius: 35,
-          elevation: 20,
-        }}
+        style={({ pressed }) => [
+          styles.orb,
+          { width: size, height: size, borderRadius: size / 2 },
+          pressed && styles.orbPressed,
+        ]}
       >
-        {/* Inner lighter area */}
-        <View
-          style={{
-            width: innerSize,
-            height: innerSize,
-            borderRadius: innerSize / 2,
-            backgroundColor: GOLD_LIGHT,
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Highlight reflection */}
-          <View
-            style={{
-              position: 'absolute',
-              top: size * 0.09,
-              left: size * 0.14,
-              width: highlightWidth,
-              height: highlightHeight,
-              borderRadius: highlightHeight / 2,
-              backgroundColor: 'rgba(255, 255, 255, 0.35)',
-              transform: [{ rotate: '-30deg' }],
-            }}
+        <Animated.View style={[styles.orbInner, animatedOrbStyle, { borderRadius: size / 2 }]}>
+          <LinearGradient
+            colors={[GOLD_LIGHT, GOLD, '#c49a4a']}
+            start={{ x: 0.2, y: 0 }}
+            end={{ x: 0.8, y: 1 }}
+            style={[styles.gradient, { borderRadius: size / 2 }]}
           />
-          {/* Pause icon */}
-          <Pause size={size * 0.2} color="rgba(10, 14, 26, 0.4)" strokeWidth={2.5} />
-        </View>
+
+          {/* Glossy overlay */}
+          <View style={[styles.glossOverlay, { borderRadius: size / 2 }]} />
+
+          {/* Top highlight */}
+          <View
+            style={[
+              styles.highlight,
+              {
+                top: size * 0.12,
+                left: size * 0.2,
+                width: size * 0.35,
+                height: size * 0.15,
+                borderRadius: size * 0.075,
+              },
+            ]}
+          />
+        </Animated.View>
       </Pressable>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  outerGlow: {
+    position: 'absolute',
+    backgroundColor: GOLD,
+    opacity: 0.4,
+    // Using shadow for blur effect on iOS
+    shadowColor: GOLD,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 1,
+    shadowRadius: 60,
+  },
+  innerGlow: {
+    position: 'absolute',
+    backgroundColor: `${GOLD}40`,
+  },
+  orb: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    // Shadow glow
+    shadowColor: GOLD,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 30,
+    elevation: 20,
+  },
+  orbPressed: {
+    opacity: 0.95,
+    transform: [{ scale: 0.98 }],
+  },
+  orbInner: {
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden',
+  },
+  gradient: {
+    flex: 1,
+  },
+  glossOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  highlight: {
+    position: 'absolute',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    transform: [{ rotate: '-15deg' }],
+  },
+});

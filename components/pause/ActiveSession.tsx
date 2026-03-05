@@ -1,8 +1,29 @@
-import { View, Text, Pressable, Animated } from 'react-native';
+import React, { useEffect, useCallback, useState } from 'react';
+import { View, Text, Pressable, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 import { X } from 'lucide-react-native';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withRepeat,
+  withTiming,
+  withSequence,
+  withDelay,
+  Easing,
+  interpolate,
+} from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+const COLORS = {
+  primary: '#d4a954',
+  primaryLight: '#f3dfa2',
+  background: '#0A0E1A',
+  textPrimary: '#F0F4F8',
+  textSecondary: '#8A9BB5',
+};
 
 interface ActiveSessionProps {
   exerciseName: string;
@@ -12,107 +33,130 @@ interface ActiveSessionProps {
   prompt?: string;
 }
 
+// Audio waveform bar component
+function WaveBar({ delay, baseHeight }: { delay: number; baseHeight: number }) {
+  const animValue = useSharedValue(0.5);
+
+  useEffect(() => {
+    animValue.value = withDelay(
+      delay,
+      withRepeat(
+        withSequence(
+          withTiming(Math.random() * 0.5 + 0.5, {
+            duration: 400 + Math.random() * 300,
+            easing: Easing.inOut(Easing.ease),
+          }),
+          withTiming(Math.random() * 0.3 + 0.3, {
+            duration: 400 + Math.random() * 300,
+            easing: Easing.inOut(Easing.ease),
+          })
+        ),
+        -1,
+        true
+      )
+    );
+  }, [animValue, delay]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: interpolate(animValue.value, [0, 1], [baseHeight * 0.3, baseHeight]),
+    opacity: interpolate(animValue.value, [0, 1], [0.6, 1]),
+  }));
+
+  return (
+    <Animated.View style={[styles.waveBar, animatedStyle]} />
+  );
+}
+
 export function ActiveSession({
   exerciseName,
   totalDuration,
   onClose,
   onComplete,
-  prompt = "Breathe in the golden light...",
+  prompt = 'Breathe in the golden light...',
 }: ActiveSessionProps) {
-  const [elapsed, setElapsed] = useState(0);
-  const floatAnim = useRef(new Animated.Value(0)).current;
-  const waveAnims = useRef([...Array(10)].map(() => new Animated.Value(0.5))).current;
-  const breathPhase = useRef<'inhale' | 'exhale'>('inhale');
+  const elapsed = useSharedValue(0);
+  const floatAnim = useSharedValue(0);
+  const liveOpacity = useSharedValue(1);
+  const promptOpacity = useSharedValue(0.9);
 
   // Float animation for orb
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(floatAnim, {
-          toValue: 1,
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(floatAnim, {
-          toValue: 0,
-          duration: 3000,
-          useNativeDriver: true,
-        }),
-      ])
+    floatAnim.value = withRepeat(
+      withSequence(
+        withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.ease) }),
+        withTiming(0, { duration: 3000, easing: Easing.inOut(Easing.ease) })
+      ),
+      -1,
+      false
     );
-    animation.start();
-    return () => animation.stop();
-  }, [floatAnim]);
 
-  // Wave animation for audio visualization
+    // Live indicator pulse
+    liveOpacity.value = withRepeat(
+      withSequence(
+        withTiming(0.5, { duration: 1000 }),
+        withTiming(1, { duration: 1000 })
+      ),
+      -1,
+      false
+    );
+
+    // Prompt pulse
+    promptOpacity.value = withRepeat(
+      withSequence(
+        withTiming(0.6, { duration: 2000 }),
+        withTiming(0.9, { duration: 2000 })
+      ),
+      -1,
+      false
+    );
+  }, [floatAnim, liveOpacity, promptOpacity]);
+
+  // Timer
   useEffect(() => {
-    const animations = waveAnims.map((anim, i) => {
-      return Animated.loop(
-        Animated.sequence([
-          Animated.timing(anim, {
-            toValue: 0.3 + Math.random() * 0.7,
-            duration: 300 + Math.random() * 400,
-            useNativeDriver: false,
-          }),
-          Animated.timing(anim, {
-            toValue: 0.5 + Math.random() * 0.3,
-            duration: 300 + Math.random() * 400,
-            useNativeDriver: false,
-          }),
-        ])
-      );
-    });
+    const interval = setInterval(() => {
+      const newElapsed = elapsed.value + 1;
+      elapsed.value = newElapsed;
 
-    animations.forEach((anim) => anim.start());
-    return () => animations.forEach((anim) => anim.stop());
-  }, [waveAnims]);
-
-  // Breathing rhythm haptics (every 4 seconds - inhale/exhale cycle)
-  useEffect(() => {
-    const hapticInterval = setInterval(() => {
-      if (breathPhase.current === 'inhale') {
-        // Light tap for inhale
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-        breathPhase.current = 'exhale';
-      } else {
-        // Softer tap for exhale
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft);
-        breathPhase.current = 'inhale';
+      if (newElapsed >= totalDuration) {
+        clearInterval(interval);
+        onComplete();
       }
+    }, 1000);
+
+    // Breathing rhythm haptics
+    const hapticInterval = setInterval(() => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }, 4000);
 
     // Initial haptic
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
 
-    return () => clearInterval(hapticInterval);
-  }, []);
+    return () => {
+      clearInterval(interval);
+      clearInterval(hapticInterval);
+    };
+  }, [totalDuration, onComplete, elapsed]);
 
-  // Timer
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setElapsed((prev) => {
-        if (prev >= totalDuration) {
-          clearInterval(interval);
-          onComplete();
-          return prev;
-        }
-        return prev + 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [totalDuration, onComplete]);
+  const floatStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: interpolate(floatAnim.value, [0, 1], [0, -10]) }],
+  }));
 
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
+  const liveStyle = useAnimatedStyle(() => ({
+    opacity: liveOpacity.value,
+  }));
 
-  const progress = (elapsed / totalDuration) * 100;
+  const promptStyle = useAnimatedStyle(() => ({
+    opacity: promptOpacity.value,
+  }));
 
-  const floatTranslate = floatAnim.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -10],
+  const progressStyle = useAnimatedStyle(() => ({
+    width: `${(elapsed.value / totalDuration) * 100}%`,
+  }));
+
+  const timerStyle = useAnimatedStyle(() => {
+    const mins = Math.floor(elapsed.value / 60);
+    const secs = Math.floor(elapsed.value % 60);
+    return {};
   });
 
   const handleClose = useCallback(() => {
@@ -120,93 +164,73 @@ export function ActiveSession({
     onClose();
   }, [onClose]);
 
-  const baseHeights = [20, 32, 48, 64, 40, 40, 64, 48, 32, 20];
+  // Format time display
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const formatTotalTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Wave bar heights (symmetric)
+  const waveHeights = [20, 32, 48, 64, 40, 40, 64, 48, 32, 20];
 
   return (
-    <View className="flex-1 bg-background-dark relative overflow-hidden">
-      {/* Background glow effects */}
-      <View className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[120vw] h-[120vw] rounded-full bg-primary/10 opacity-60" />
-      <View className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[60vw] h-[60vw] rounded-full bg-primary/10 blur-3xl" />
+    <View style={styles.container}>
+      {/* Background gradient */}
+      <LinearGradient
+        colors={['#1a1408', '#0f0a04', '#050302']}
+        locations={[0, 0.5, 1]}
+        style={StyleSheet.absoluteFillObject}
+      />
 
-      <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
+      {/* Background glow effects */}
+      <View style={styles.bgGlow1} />
+      <View style={styles.bgGlow2} />
+
+      <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
         {/* Header */}
-        <View className="flex-row items-center justify-between px-6 pt-2">
-          <Pressable
-            className="w-14 h-14 rounded-full bg-white/10 items-center justify-center border border-white/10 active:opacity-70"
-            onPress={handleClose}
-          >
-            <X size={32} color="#F0F4F8" />
+        <View style={styles.header}>
+          <Pressable style={styles.closeButton} onPress={handleClose}>
+            <X size={32} color={COLORS.textPrimary} />
           </Pressable>
 
-          <View className="flex-row items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
-            <Animated.View
-              className="w-2 h-2 rounded-full bg-red-500"
-              style={{
-                opacity: floatAnim.interpolate({
-                  inputRange: [0, 0.5, 1],
-                  outputRange: [1, 0.5, 1],
-                }),
-              }}
-            />
-            <Text className="text-xs font-bold tracking-widest text-white/80 uppercase">
-              Live
-            </Text>
+          <View style={styles.liveBadge}>
+            <Animated.View style={[styles.liveDot, liveStyle]} />
+            <Text style={styles.liveText}>LIVE</Text>
           </View>
         </View>
 
-        {/* Main Orb */}
-        <View className="flex-1 items-center justify-center pb-16">
-          <Animated.View
-            style={{ transform: [{ translateY: floatTranslate }] }}
-            className="w-80 h-80 items-center justify-center"
-          >
+        {/* Main Orb Section */}
+        <View style={styles.orbSection}>
+          <Animated.View style={[styles.orbContainer, floatStyle]}>
             {/* Outer glow */}
-            <View className="absolute w-80 h-80 rounded-full bg-primary/15" />
+            <View style={styles.orbGlow} />
 
             {/* Main orb */}
-            <View className="w-72 h-72 rounded-full bg-primary/15 border border-primary/30 items-center justify-center">
+            <View style={styles.orb}>
               {/* Inner rings */}
-              <View className="absolute w-64 h-64 rounded-full border border-primary/20" />
-              <View className="absolute w-48 h-48 rounded-full border border-primary/10" />
+              <View style={styles.orbRing1} />
+              <View style={styles.orbRing2} />
 
               {/* Waveform + Timer */}
-              <View className="flex-row items-center gap-1.5">
+              <View style={styles.waveformContainer}>
                 {/* Left wave bars */}
-                {waveAnims.slice(0, 5).map((anim, i) => (
-                  <Animated.View
-                    key={`left-${i}`}
-                    className="w-1.5 rounded-full bg-primary/80"
-                    style={{
-                      height: anim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [baseHeights[i] * 0.3, baseHeights[i]],
-                      }),
-                    }}
-                  />
+                {waveHeights.slice(0, 5).map((height, i) => (
+                  <WaveBar key={`left-${i}`} delay={i * 100} baseHeight={height} />
                 ))}
 
                 {/* Timer */}
-                <View className="items-center mx-4">
-                  <Text className="text-7xl font-light text-text-primary tracking-tighter">
-                    {formatTime(elapsed)}
-                  </Text>
-                  <Text className="text-2xl font-medium text-primary mt-1 tracking-wide">
-                    / {formatTime(totalDuration)}
-                  </Text>
-                </View>
+                <TimerDisplay elapsed={elapsed} totalDuration={totalDuration} />
 
-                {/* Right wave bars */}
-                {waveAnims.slice(5, 10).map((anim, i) => (
-                  <Animated.View
-                    key={`right-${i}`}
-                    className="w-1.5 rounded-full bg-primary/80"
-                    style={{
-                      height: anim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [baseHeights[i + 5] * 0.3, baseHeights[i + 5]],
-                      }),
-                    }}
-                  />
+                {/* Right wave bars (reversed) */}
+                {waveHeights.slice(5).map((height, i) => (
+                  <WaveBar key={`right-${i}`} delay={(5 + i) * 100} baseHeight={height} />
                 ))}
               </View>
             </View>
@@ -214,25 +238,245 @@ export function ActiveSession({
         </View>
 
         {/* Footer */}
-        <View className="px-8 pb-12 items-center gap-5">
-          <Text className="text-3xl font-semibold text-text-primary tracking-wide text-center">
-            {exerciseName}
-          </Text>
+        <View style={styles.footer}>
+          <Text style={styles.exerciseName}>{exerciseName}</Text>
 
           {/* Progress bar */}
-          <View className="w-full h-2 rounded-full bg-white/10 overflow-hidden border border-white/5">
-            <Animated.View
-              className="h-full rounded-full bg-primary"
-              style={{ width: `${progress}%` }}
-            />
+          <View style={styles.progressContainer}>
+            <Animated.View style={[styles.progressFill, progressStyle]} />
           </View>
 
-          {/* Prompt */}
-          <Text className="text-xl font-light text-primary-light italic text-center opacity-90">
+          {/* Prompt text */}
+          <Animated.Text style={[styles.promptText, promptStyle]}>
             "{prompt}"
-          </Text>
+          </Animated.Text>
         </View>
       </SafeAreaView>
     </View>
   );
 }
+
+// Separate timer component to handle animated value display
+function TimerDisplay({
+  elapsed,
+  totalDuration,
+}: {
+  elapsed: Animated.SharedValue<number>;
+  totalDuration: number;
+}) {
+  const [displayTime, setDisplayTime] = useState('0:00');
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const mins = Math.floor(elapsed.value / 60);
+      const secs = Math.floor(elapsed.value % 60);
+      setDisplayTime(`${mins}:${secs.toString().padStart(2, '0')}`);
+    }, 100);
+    return () => clearInterval(interval);
+  }, [elapsed]);
+
+  const formatTotal = () => {
+    const mins = Math.floor(totalDuration / 60);
+    const secs = totalDuration % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <View style={styles.timerContainer}>
+      <Text style={styles.timerText}>{displayTime}</Text>
+      <Text style={styles.timerTotal}>/ {formatTotal()}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#050302',
+  },
+  safeArea: {
+    flex: 1,
+  },
+  bgGlow1: {
+    position: 'absolute',
+    top: '25%',
+    left: '50%',
+    transform: [{ translateX: -SCREEN_WIDTH * 0.6 }],
+    width: SCREEN_WIDTH * 1.2,
+    height: SCREEN_WIDTH * 1.2,
+    borderRadius: SCREEN_WIDTH * 0.6,
+    backgroundColor: '#3d2a0a',
+    opacity: 0.4,
+  },
+  bgGlow2: {
+    position: 'absolute',
+    top: '30%',
+    left: '50%',
+    transform: [{ translateX: -SCREEN_WIDTH * 0.3 }],
+    width: SCREEN_WIDTH * 0.6,
+    height: SCREEN_WIDTH * 0.6,
+    borderRadius: SCREEN_WIDTH * 0.3,
+    backgroundColor: '#5c4010',
+    opacity: 0.3,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingTop: 8,
+  },
+  closeButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+  },
+  liveBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  liveDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#EF4444',
+    shadowColor: '#EF4444',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+  },
+  liveText: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 2,
+  },
+  orbSection: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingBottom: 64,
+  },
+  orbContainer: {
+    width: 320,
+    height: 320,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  orbGlow: {
+    position: 'absolute',
+    width: 320,
+    height: 320,
+    borderRadius: 160,
+    backgroundColor: `${COLORS.primary}26`,
+  },
+  orb: {
+    width: 288,
+    height: 288,
+    borderRadius: 144,
+    backgroundColor: `${COLORS.primary}26`,
+    borderWidth: 1,
+    borderColor: `${COLORS.primary}4D`,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  orbRing1: {
+    position: 'absolute',
+    width: 256,
+    height: 256,
+    borderRadius: 128,
+    borderWidth: 1,
+    borderColor: `${COLORS.primary}33`,
+  },
+  orbRing2: {
+    position: 'absolute',
+    width: 192,
+    height: 192,
+    borderRadius: 96,
+    borderWidth: 1,
+    borderColor: `${COLORS.primary}1A`,
+  },
+  waveformContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  waveBar: {
+    width: 6,
+    borderRadius: 3,
+    backgroundColor: `${COLORS.primary}CC`,
+  },
+  timerContainer: {
+    alignItems: 'center',
+    marginHorizontal: 16,
+  },
+  timerText: {
+    fontSize: 72,
+    fontWeight: '200',
+    color: COLORS.textPrimary,
+    letterSpacing: -2,
+    fontVariant: ['tabular-nums'],
+    textShadowColor: `${COLORS.primary}99`,
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 25,
+  },
+  timerTotal: {
+    fontSize: 24,
+    fontWeight: '500',
+    color: COLORS.primary,
+    marginTop: 8,
+    letterSpacing: 1,
+  },
+  footer: {
+    paddingHorizontal: 32,
+    paddingBottom: 48,
+    alignItems: 'center',
+    gap: 20,
+  },
+  exerciseName: {
+    fontSize: 32,
+    fontWeight: '600',
+    color: COLORS.textPrimary,
+    letterSpacing: 1,
+    textAlign: 'center',
+  },
+  progressContainer: {
+    width: '100%',
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.05)',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 4,
+    backgroundColor: COLORS.primary,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+  },
+  promptText: {
+    fontSize: 20,
+    fontWeight: '300',
+    color: COLORS.primaryLight,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    maxWidth: '90%',
+    lineHeight: 28,
+  },
+});

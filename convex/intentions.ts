@@ -88,7 +88,6 @@ export const update = mutation({
   },
 });
 
-// Delete an intention
 export const remove = mutation({
   args: {
     intentionId: v.id("intentions"),
@@ -103,5 +102,19 @@ export const remove = mutation({
     }
 
     await ctx.db.delete(args.intentionId);
+  },
+});
+
+export const getCount = query({
+  handler: async (ctx) => {
+    const user = await getUser(ctx);
+    if (!user) return 0;
+
+    const intentions = await ctx.db
+      .query("intentions")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .collect();
+
+    return intentions.length;
   },
 });

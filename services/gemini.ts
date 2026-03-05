@@ -187,8 +187,8 @@ export async function getCoachResponse(
     { role: 'user' as const, content: userMessage },
   ];
 
-  // Gemini API endpoint
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.0-flash:generateContent?key=${apiKey}`;
+  // Gemini API endpoint - using gemini-3-flash-preview
+  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
   const requestBody = {
     contents: messages.map(m => ({

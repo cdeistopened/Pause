@@ -1,5 +1,5 @@
-import { View, Text, Pressable, Dimensions } from 'react-native';
-import { Wind, Sun, Hash, MessageCircle, Smile } from 'lucide-react-native';
+import { View, Text, Pressable } from 'react-native';
+import { Wind, Sun, Hash, Smile } from 'lucide-react-native';
 import { EXERCISE_CATEGORIES, ExerciseCategoryId, ExerciseIconId } from '@/constants/exercises';
 import Svg, { Circle } from 'react-native-svg';
 
@@ -13,7 +13,6 @@ const ICONS: Record<ExerciseIconId, typeof Wind> = {
   wind: Wind,
   sun: Sun,
   hash: Hash,
-  'message-circle': MessageCircle,
   smile: Smile,
 };
 

@@ -1,7 +1,7 @@
 // Exercise categories for the radial selector on the home screen
-// 5 exercises positioned radially around the golden orb
+// 4 core exercises positioned radially around the golden orb
 
-export type ExerciseIconId = 'wind' | 'sun' | 'hash' | 'message-circle' | 'smile';
+export type ExerciseIconId = 'wind' | 'sun' | 'hash' | 'smile';
 
 export interface ExerciseCategory {
   id: string;
@@ -13,57 +13,48 @@ export interface ExerciseCategory {
   angle: number; // Radial position in degrees (0 = top, clockwise)
 }
 
-// 5 exercise categories positioned radially (Stitch design)
-// Positions: Breath (top), Light (top-right), Count (bottom-right), Talk (bottom-left), Relax (top-left)
+// 4 core exercise categories positioned radially (90° spacing)
+// Positions: Breath (top), Light (right), Count (bottom), Relax (left)
 export const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   {
     id: 'breath',
-    name: 'Breath',
+    name: 'Diaphragmatic Breathing',
     shortName: 'Breath',
     iconId: 'wind',
-    description: 'Diaphragmatic breathing for calm',
+    description: 'Slow, deep breathing for calm',
     defaultDuration: 90,
     angle: 0, // Top
   },
   {
     id: 'light',
-    name: 'Light',
+    name: 'Golden Light',
     shortName: 'Light',
     iconId: 'sun',
-    description: 'Golden light visualization',
+    description: 'Visualization for inner warmth',
     defaultDuration: 90,
-    angle: 72, // Top-right
+    angle: 90, // Right
   },
   {
     id: 'count',
-    name: 'Count',
+    name: 'Counting Practice',
     shortName: 'Count',
     iconId: 'hash',
     description: 'Mental focus and clarity',
     defaultDuration: 60,
-    angle: 144, // Bottom-right
-  },
-  {
-    id: 'talk',
-    name: 'Talk',
-    shortName: 'Talk',
-    iconId: 'message-circle',
-    description: 'Positive self-talk practice',
-    defaultDuration: 60,
-    angle: 216, // Bottom-left
+    angle: 180, // Bottom
   },
   {
     id: 'relax',
-    name: 'Relax',
+    name: 'Progressive Relaxation',
     shortName: 'Relax',
     iconId: 'smile',
-    description: 'Progressive relaxation',
+    description: 'Release tension head to toe',
     defaultDuration: 90,
-    angle: 288, // Top-left
+    angle: 270, // Left
   },
 ];
 
-export type ExerciseCategoryId = 'breath' | 'light' | 'count' | 'talk' | 'relax';
+export type ExerciseCategoryId = 'breath' | 'light' | 'count' | 'relax';
 
 // Get category by ID
 export function getExerciseCategory(id: string): ExerciseCategory | undefined {

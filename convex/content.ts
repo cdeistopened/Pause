@@ -29,9 +29,10 @@ export const list = query({
         .query("content")
         .withIndex("by_exercise_type", (q) => q.eq("exerciseType", args.exerciseType));
     } else if (args.type) {
+      const typeFilter = args.type;
       contentQuery = ctx.db
         .query("content")
-        .withIndex("by_type", (q) => q.eq("type", args.type));
+        .withIndex("by_type", (q) => q.eq("type", typeFilter));
     } else {
       contentQuery = ctx.db.query("content");
     }

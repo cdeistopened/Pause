@@ -1,0 +1,754 @@
+<!-- AI Coach Chat Interface -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Coach Chat Interface</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4a954",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#1f1b13",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-[#201c13] dark:text-white transition-colors duration-300">
+<div class="relative flex h-screen max-w-md mx-auto flex-col overflow-hidden shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Top Navigation -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<div class="text-[#201c13] dark:text-white flex size-12 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back_ios_new</span>
+</div>
+<h2 class="text-[#201c13] dark:text-white text-lg font-bold leading-tight tracking-tight flex-1 text-center font-display">Pause AI Coach</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-full h-12 bg-transparent text-[#201c13] dark:text-white">
+<span class="material-symbols-outlined">info</span>
+</button>
+</div>
+</div>
+<!-- Main Chat Area -->
+<div class="flex-1 overflow-y-auto px-4 py-2 space-y-6">
+<!-- User Input Card -->
+<div class="@container">
+<div class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row shadow-sm bg-white/50 dark:bg-[#2f291d] border border-black/5 dark:border-white/5 overflow-hidden">
+<div class="w-full bg-center bg-no-repeat aspect-[16/6] bg-cover" data-alt="Abstract golden silk patterns flowing softly" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVU6tEPoytBlKC_VOuy7aEwJfKKSRzO0WQrSzZFoOMUa29VUzBfQouD3GOpXsCBruAjvbpumRJ6QuDjKN_iVCDejVJIlDh21fysnWq_qImluHsDwRQh-Muj9y8qJFt-vdy0gAsHy7qhS90pUND5nwKZLU-_T1bFKr_mUIi8GDmULd8wqTUfkKdMl45Xg0p6HKzCawzgY8APyMD8ppV0Lo1oMCKlpSfDXSIUY0t9wEqPs0Isn-yINquicKEIbkv4Fr3DDjo8_Qzd28");'>
+</div>
+<div class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 p-4">
+<p class="text-primary text-xs font-bold uppercase tracking-widest">You Asked</p>
+<div class="flex items-end gap-3 justify-between">
+<p class="text-[#201c13] dark:text-[#c1b49a] text-lg font-medium leading-normal italic">"I'm feeling anxious"</p>
+</div>
+</div>
+</div>
+</div>
+<!-- AI Response -->
+<div class="space-y-4">
+<h3 class="text-[#201c13] dark:text-white tracking-tight text-2xl font-bold leading-tight text-left font-display">
+                    I understand. Let's take a moment to ground ourselves. Would you like to try a 60-second breathing exercise?
+                </h3>
+<!-- Action Button -->
+<div class="flex justify-start">
+<button class="flex min-w-[180px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-14 px-8 bg-primary text-[#201c13] gap-3 text-base font-extrabold shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined fill-1">play_arrow</span>
+<span class="truncate">Start Breathing</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom UI Interaction -->
+<div class="p-4 space-y-4 pb-8 bg-gradient-to-t from-background-light dark:from-background-dark via-background-light dark:via-background-dark to-transparent">
+<!-- Suggestions -->
+<div class="space-y-2">
+<h4 class="text-[#201c13]/60 dark:text-[#c1b49a] text-[10px] font-bold uppercase tracking-[0.2em] px-1">Try asking</h4>
+<div class="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+<button class="whitespace-nowrap rounded-full px-4 py-2 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-sm font-semibold hover:bg-primary/20 transition-colors">
+                        Help me focus
+                    </button>
+<button class="whitespace-nowrap rounded-full px-4 py-2 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-sm font-semibold hover:bg-primary/20 transition-colors">
+                        Quick meditation
+                    </button>
+<button class="whitespace-nowrap rounded-full px-4 py-2 bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 text-sm font-semibold hover:bg-primary/20 transition-colors">
+                        Better sleep
+                    </button>
+</div>
+</div>
+<!-- Input Field -->
+<div class="relative flex items-center">
+<div class="relative flex-1">
+<input class="w-full h-14 pl-6 pr-14 rounded-full border-none bg-black/5 dark:bg-[#2f291d] text-[#201c13] dark:text-white placeholder-[#201c13]/40 dark:placeholder-[#c1b49a]/50 focus:ring-2 focus:ring-primary/50 transition-all font-medium" placeholder="Ask me anything..." type="text"/>
+<div class="absolute right-2 top-2">
+<button class="flex size-10 items-center justify-center rounded-full bg-primary text-[#201c13] shadow-md">
+<span class="material-symbols-outlined text-[24px]">mic</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Home Indicator (iOS Style) -->
+<div class="flex justify-center pb-2">
+<div class="w-32 h-1.5 bg-[#201c13]/20 dark:bg-white/20 rounded-full"></div>
+</div>
+</div>
+<style>
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</body></html>
+
+<!-- Exercise Library Cards -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pause - Exercise Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4a954",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#1f1b13",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white transition-colors duration-300">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md px-4 py-4 flex items-center justify-between border-b border-primary/10">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<h1 class="text-2xl font-extrabold tracking-tight">Library</h1>
+</div>
+<button class="size-10 rounded-full flex items-center justify-center bg-primary/10 text-primary">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</header>
+<main class="max-w-md mx-auto pb-24">
+<!-- Search Bar Section -->
+<div class="px-4 py-6">
+<label class="relative flex items-center group">
+<div class="absolute left-4 text-primary group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-primary/5 border-2 border-transparent focus:border-primary/50 focus:ring-0 rounded-full text-base font-medium placeholder:text-slate-400 dark:placeholder:text-slate-500 transition-all" placeholder="Find an exercise..." type="text"/>
+</label>
+</div>
+<!-- Filter Chips Section -->
+<div class="flex gap-3 px-4 pb-6 overflow-x-auto hide-scrollbar">
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary text-background-dark text-sm font-bold shadow-lg shadow-primary/20">
+                All
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary/10 border border-primary/20 text-slate-700 dark:text-slate-300 text-sm font-bold hover:bg-primary/20 transition-all">
+                Counting
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary/10 border border-primary/20 text-slate-700 dark:text-slate-300 text-sm font-bold hover:bg-primary/20 transition-all">
+                Relaxation
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary/10 border border-primary/20 text-slate-700 dark:text-slate-300 text-sm font-bold hover:bg-primary/20 transition-all">
+                Talk
+            </button>
+<button class="flex h-10 shrink-0 items-center justify-center px-6 rounded-full bg-primary/10 border border-primary/20 text-slate-700 dark:text-slate-300 text-sm font-bold hover:bg-primary/20 transition-all">
+                Sleep
+            </button>
+</div>
+<!-- Exercise Cards List -->
+<div class="px-4 space-y-6">
+<!-- Card 1: Featured -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-[#2f291d] shadow-xl dark:shadow-none border border-slate-100 dark:border-primary/10">
+<div class="relative w-full aspect-[16/9] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent z-10"></div>
+<img alt="Breathing Exercise" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Person practicing deep breathing in a sunset forest" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkOAb1j6ckYrkWRpWkUCkiRn6Tec4JlZ1BKwG75YOcirbGmpwUrLczsObR_RxsXsXefpc_Qa1D4ZiUbSaO4Q6ZpIrWX_Hol25x6a33EkY9RCNfvh-IfSjz9ZbCkw0qHQKoZoNQk_VXgVkeswqBjIxpM9Jq-SNjoWtb56jW5UbRrp3SckdAI9kDydX7Am63O0VV6L26gTtqHImsbG15ZUATUOcDdFbohMf692rAhfdetnW1WVss8Y81Emyetd7fDP2imtqnmRbWwOg"/>
+<div class="absolute top-4 left-4 z-20">
+<span class="px-3 py-1 bg-primary text-background-dark text-[10px] font-black tracking-widest uppercase rounded-full">New Content</span>
+</div>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-primary text-xs font-black tracking-[0.2em] uppercase mb-1">Breathing</p>
+<h3 class="text-xl font-extrabold tracking-tight mb-3 group-hover:text-primary transition-colors">Diaphragmatic Breathing</h3>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex gap-2">
+<span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-600 dark:text-primary/70 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">schedule</span> 60 sec
+                            </span>
+<span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-600 dark:text-primary/70 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span> Beginner
+                            </span>
+</div>
+<button class="size-12 rounded-full bg-primary text-background-dark flex items-center justify-center shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1 text-3xl">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-[#2f291d] shadow-xl dark:shadow-none border border-slate-100 dark:border-primary/10">
+<div class="relative w-full aspect-[16/9] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent z-10"></div>
+<img alt="Focus Exercise" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Abstract geometric shapes representing focus and clarity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCi8GFjbZsuQtcQYJLsd1kM-ICrLJqpRZJFhUQezdHVCNWAgTKb0EPkRc2DnqIZkY1TTZvu7K_JblFMA0q-abIBaCfS5n56CBUBZu5VzxwdqMXsSYzyapuWb4rAhthGfVNLzHrUp9mTr2mlpBX_s_JncF1TEzO_kQw6hz4iAxhar4KQZnI74Q6KZiLUmFxJbJv3kVL1jjJK94CA-x27iQwzWZ8STCnqBLvTnPSIyiuxgkRMQIKrCEpWSFsP12jjQxk72Z-eD6YwTTE"/>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-primary text-xs font-black tracking-[0.2em] uppercase mb-1">Focus</p>
+<h3 class="text-xl font-extrabold tracking-tight mb-3 group-hover:text-primary transition-colors">Box Breathing</h3>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex gap-2">
+<span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-600 dark:text-primary/70 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">schedule</span> 5 min
+                            </span>
+<span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-600 dark:text-primary/70 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span> Intermediate
+                            </span>
+</div>
+<button class="size-12 rounded-full bg-primary text-background-dark flex items-center justify-center shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1 text-3xl">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group relative overflow-hidden rounded-xl bg-white dark:bg-[#2f291d] shadow-xl dark:shadow-none border border-slate-100 dark:border-primary/10">
+<div class="relative w-full aspect-[16/9] overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent z-10"></div>
+<img alt="Relax Exercise" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Soft morning light illuminating a calm meditation space" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNH5vJOglTyhikF_hBiD5AxvkmMGI5KCabAu5JI8cP4o1cUndfPiQTGZfODvYtOk7i5H6vakrcX4rwNVBQIn_A4s62nrrbLlaMke3u3iRlzvlW00TDF-jrgDDu9eWHqjRL_UacOFRwnyp-mvTPwnOdg0AsGqRVjVJ-SvJ536UQ0OTPJNRYzCZs1f5Rn8sX5s4xNk0SOGW-nLgjz2Kc_5eW_0yPJBcssivR3tZCUZsN2ETW0Mlqd7dGny4SijVjENloTxBDsnlLrnA"/>
+</div>
+<div class="p-5">
+<div class="flex justify-between items-start">
+<div>
+<p class="text-primary text-xs font-black tracking-[0.2em] uppercase mb-1">Relax</p>
+<h3 class="text-xl font-extrabold tracking-tight mb-3 group-hover:text-primary transition-colors">Body Scan</h3>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<div class="flex gap-2">
+<span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-600 dark:text-primary/70 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">schedule</span> 10 min
+                            </span>
+<span class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 dark:bg-primary/10 text-slate-600 dark:text-primary/70 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span> Beginner
+                            </span>
+</div>
+<button class="size-12 rounded-full bg-primary text-background-dark flex items-center justify-center shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined fill-1 text-3xl">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-lg border-t border-primary/10 pb-8 pt-3 px-8 flex justify-between items-center">
+<button class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined fill-1">grid_view</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Library</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined">favorite</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Favorites</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-wider">Settings</span>
+</button>
+</nav>
+</body></html>
+
+<!-- Daily Habits and Progress -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pause - Daily Habits and Progress</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4a954",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#1f1b13",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .dot-filled {
+            box-shadow: 0 0 12px rgba(212, 169, 84, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-300">
+<div class="max-w-md mx-auto min-h-screen flex flex-col relative overflow-hidden">
+<!-- Top App Bar -->
+<header class="flex items-center justify-between p-6 pt-12">
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary">arrow_back_ios_new</span>
+</div>
+<h2 class="text-lg font-semibold tracking-tight">Your Journey</h2>
+<div class="flex items-center justify-center w-10 h-10 rounded-full bg-white/10 backdrop-blur-md">
+<span class="material-symbols-outlined text-primary">settings</span>
+</div>
+</header>
+<!-- Progress Overview Card -->
+<section class="px-6 mb-8">
+<div class="bg-primary/10 border border-primary/20 rounded-lg p-6 flex flex-col gap-6">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="text-2xl font-bold tracking-tight">This Week</h3>
+<p class="text-primary font-medium mt-1">Consistency is key</p>
+</div>
+<p class="text-sm font-normal text-slate-500 dark:text-primary/70">5 of 7 days filled</p>
+</div>
+<!-- Weekly Cumulative Dots -->
+<div class="flex justify-between items-center gap-2">
+<!-- Monday to Sunday dots -->
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary dot-filled flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">M</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary dot-filled flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">T</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary dot-filled flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">W</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary dot-filled flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">T</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary dot-filled flex items-center justify-center">
+<span class="material-symbols-outlined text-background-dark text-sm" style="font-variation-settings: 'wght' 700">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">F</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/10"></div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">S</span>
+</div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-white/10"></div>
+<span class="text-[10px] uppercase tracking-widest text-slate-400">S</span>
+</div>
+</div>
+<div class="pt-2 border-t border-primary/10">
+<p class="text-sm dark:text-slate-300">You're doing great! Keep the light shining.</p>
+</div>
+</div>
+</section>
+<!-- Exercise Tracking Section -->
+<section class="flex-1 px-6 flex flex-col gap-4">
+<h3 class="text-lg font-bold tracking-tight mb-2">Exercise Tracking</h3>
+<!-- Habit Item: Breathing -->
+<div class="flex items-center gap-4 bg-white/5 dark:bg-white/5 p-4 rounded-lg">
+<div class="flex items-center justify-center rounded-full bg-primary/20 shrink-0 w-12 h-12">
+<span class="material-symbols-outlined text-primary">air</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<p class="text-base font-semibold leading-none">Breathing</p>
+<span class="text-xs text-primary font-medium uppercase tracking-tighter">12 sessions</span>
+</div>
+<!-- Frequency Dot Cloud -->
+<div class="flex flex-wrap gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+</div>
+</div>
+</div>
+<!-- Habit Item: Golden Light -->
+<div class="flex items-center gap-4 bg-white/5 dark:bg-white/5 p-4 rounded-lg">
+<div class="flex items-center justify-center rounded-full bg-primary/20 shrink-0 w-12 h-12">
+<span class="material-symbols-outlined text-primary">light_mode</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<p class="text-base font-semibold leading-none">Golden Light</p>
+<span class="text-xs text-primary font-medium uppercase tracking-tighter">8 sessions</span>
+</div>
+<!-- Frequency Dot Cloud -->
+<div class="flex flex-wrap gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+</div>
+</div>
+</div>
+<!-- Habit Item: Counting -->
+<div class="flex items-center gap-4 bg-white/5 dark:bg-white/5 p-4 rounded-lg">
+<div class="flex items-center justify-center rounded-full bg-primary/20 shrink-0 w-12 h-12">
+<span class="material-symbols-outlined text-primary">filter_3</span>
+</div>
+<div class="flex flex-col flex-1">
+<div class="flex justify-between items-baseline mb-2">
+<p class="text-base font-semibold leading-none">Counting</p>
+<span class="text-xs text-primary font-medium uppercase tracking-tighter">5 sessions</span>
+</div>
+<!-- Frequency Dot Cloud -->
+<div class="flex flex-wrap gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-primary dot-filled"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quote Section -->
+<footer class="mt-auto px-10 py-12 text-center">
+<div class="w-12 h-0.5 bg-primary/20 mx-auto mb-8 rounded-full"></div>
+<p class="italic text-xl font-light leading-relaxed dark:text-slate-200">
+                “A little over time is a lot.”
+            </p>
+<p class="mt-3 text-sm font-medium text-primary tracking-widest uppercase">
+                Dr. Miller
+            </p>
+</footer>
+<!-- Bottom Navigation Bar -->
+<nav class="flex justify-around items-center p-6 pb-10 bg-white/5 dark:bg-white/5 backdrop-blur-xl border-t border-white/10">
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<div class="bg-primary/20 px-4 py-1 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">insights</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">self_improvement</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">person_outline</span>
+</div>
+</nav>
+<!-- Aesthetic Background Elements -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 -left-32 w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+</div>
+</body></html>
+
+<!-- App Settings and Profile -->
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pause - App Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d4a954",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#1f1b13",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white transition-colors duration-300">
+<div class="max-w-md mx-auto min-h-screen pb-12">
+<!-- Top Navigation Bar -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+<div class="text-primary flex size-12 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">Settings</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-12 bg-transparent text-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</div>
+<!-- Profile Header -->
+<div class="flex p-6 @container">
+<div class="flex w-full flex-col gap-4 items-center">
+<div class="flex gap-4 flex-col items-center">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full min-h-32 w-32 border-2 border-primary/40 p-1" data-alt="User profile picture of a serene person" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBt4XjvCpZ-wNy8KdkrehGJVUct6xbji7M3yDq2-oKku455EmLzdQEThDszKgw4mIUWKKXrHyl9ySFwXoc7E1YCtAsCCaEvvW8Oqih-UTOaYVnYkdC_c31OyGRBDSelHqMYS2f1hg4kHmFdbWjjPSDmr4jlP2NeW_nl1s0AJbCK6wYmAw_reHYFIdm8GzPRLTayVG1AfovyXHRK__uOQcnjuNH4Hmuou8ffQo3gxqqcMTE7_WGS_1PSghLzGEk2bRRaWwAYshSixrE");'>
+</div>
+<div class="absolute bottom-1 right-1 bg-primary text-background-dark rounded-full p-1.5 flex items-center justify-center border-2 border-background-dark">
+<span class="material-symbols-outlined text-sm" style="font-size: 16px;">edit</span>
+</div>
+</div>
+<div class="flex flex-col items-center justify-center">
+<p class="text-slate-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">Alex Rivera</p>
+<p class="text-slate-500 dark:text-[#c1b49a] text-base font-normal leading-normal text-center">alex.rivera@pause.app</p>
+<div class="mt-2 inline-flex items-center gap-2 bg-primary/10 px-4 py-1 rounded-full">
+<span class="material-symbols-outlined text-primary text-sm" style="font-size: 14px; font-variation-settings: 'FILL' 1;">spa</span>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider">Deeply Mindful</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Preferences Section -->
+<div class="mt-4">
+<h3 class="text-slate-500 dark:text-[#c1b49a] text-xs font-bold uppercase tracking-widest px-6 pb-2 pt-4">Preferences</h3>
+<div class="space-y-1">
+<!-- Breathing Pace -->
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">air</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Breathing Pace</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-slate-400 dark:text-[#c1b49a]/60 text-sm">6 bpm</span>
+<span class="text-slate-400 dark:text-[#c1b49a]/60 material-symbols-outlined">chevron_right</span>
+</div>
+</div>
+<!-- Vibration Feedback -->
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">vibration</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Vibration Feedback</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-[#423a29] p-0.5 transition-all duration-200 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<!-- Session Reminders -->
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Session Reminders</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-[#423a29] p-0.5 transition-all duration-200 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Notifications Section -->
+<div class="mt-6">
+<h3 class="text-slate-500 dark:text-[#c1b49a] text-xs font-bold uppercase tracking-widest px-6 pb-2 pt-4">Notifications</h3>
+<div class="space-y-1">
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">campaign</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Mindfulness Quotes</p>
+</div>
+<div class="shrink-0">
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-[#423a29] p-0.5 transition-all duration-200 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-full w-[27px] rounded-full bg-white shadow-md"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Account Section -->
+<div class="mt-6">
+<h3 class="text-slate-500 dark:text-[#c1b49a] text-xs font-bold uppercase tracking-widest px-6 pb-2 pt-4">Account</h3>
+<div class="space-y-1">
+<!-- Subscription -->
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">workspace_premium</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Manage Subscription</p>
+</div>
+<span class="text-slate-400 dark:text-[#c1b49a]/60 material-symbols-outlined">chevron_right</span>
+</div>
+<!-- Password -->
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Security &amp; Password</p>
+</div>
+<span class="text-slate-400 dark:text-[#c1b49a]/60 material-symbols-outlined">chevron_right</span>
+</div>
+<!-- Privacy -->
+<div class="flex items-center gap-4 bg-transparent px-6 min-h-16 justify-between cursor-pointer hover:bg-slate-100 dark:hover:bg-primary/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="text-primary flex items-center justify-center rounded-xl bg-primary/10 shrink-0 size-11">
+<span class="material-symbols-outlined">policy</span>
+</div>
+<p class="text-slate-900 dark:text-white text-base font-medium flex-1 truncate">Privacy Policy</p>
+</div>
+<span class="text-slate-400 dark:text-[#c1b49a]/60 material-symbols-outlined">open_in_new</span>
+</div>
+</div>
+</div>
+<!-- Logout & Footer -->
+<div class="mt-12 px-6 flex flex-col items-center gap-6">
+<button class="w-full h-14 rounded-xl border border-primary/20 bg-primary/5 text-primary font-bold text-base hover:bg-primary/10 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">logout</span>
+                Log Out
+            </button>
+<div class="text-center">
+<p class="text-slate-400 dark:text-[#c1b49a]/40 text-xs font-medium uppercase tracking-widest">Pause App • Version 2.4.0</p>
+</div>
+</div>
+</div>
+</body></html>

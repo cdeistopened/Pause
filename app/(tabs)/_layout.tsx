@@ -1,37 +1,28 @@
 import { Tabs } from 'expo-router';
-import { View, Platform } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { BookOpen, Mic, BarChart2, Settings } from 'lucide-react-native';
 
-const GOLD = '#d4a954';
+const COLORS = {
+  gold: '#d4a954',
+  goldFaded: 'rgba(212, 169, 84, 0.15)',
+  goldGlow: 'rgba(212, 169, 84, 0.25)',
+  inactive: 'rgba(255, 255, 255, 0.4)',
+  tabBar: 'rgba(22, 34, 53, 0.95)',
+  tabBarBorder: 'rgba(255, 255, 255, 0.08)',
+  surface: '#1A2B3C',
+  background: '#0A0E1A',
+};
 
 export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {
-          position: 'absolute',
-          bottom: Platform.OS === 'ios' ? 34 : 20,
-          left: 20,
-          right: 20,
-          backgroundColor: 'rgba(22, 34, 53, 0.95)',
-          borderRadius: 32,
-          height: 64,
-          paddingBottom: 0,
-          paddingTop: 0,
-          paddingHorizontal: 8,
-          borderTopWidth: 0,
-          borderWidth: 1,
-          borderColor: 'rgba(255, 255, 255, 0.08)',
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.3,
-          shadowRadius: 16,
-          elevation: 20,
-        },
-        tabBarActiveTintColor: GOLD,
-        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.4)',
+        tabBarStyle: styles.tabBar,
+        tabBarActiveTintColor: COLORS.gold,
+        tabBarInactiveTintColor: COLORS.inactive,
         tabBarShowLabel: false,
+        tabBarItemStyle: styles.tabBarItem,
       }}
       initialRouteName="index"
     >
@@ -41,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: 'Library',
           tabBarIcon: ({ color, focused }) => (
-            <View className={`p-2.5 rounded-2xl ${focused ? 'bg-primary/15' : ''}`}>
+            <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
               <BookOpen size={24} color={color} strokeWidth={focused ? 2.5 : 1.5} />
             </View>
           ),
@@ -54,7 +45,7 @@ export default function TabLayout() {
         options={{
           title: 'Coach',
           tabBarIcon: ({ color, focused }) => (
-            <View className={`p-2.5 rounded-2xl ${focused ? 'bg-primary/15' : ''}`}>
+            <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
               <Mic size={24} color={color} strokeWidth={focused ? 2.5 : 1.5} />
             </View>
           ),
@@ -67,37 +58,13 @@ export default function TabLayout() {
         options={{
           title: '',
           tabBarIcon: ({ focused }) => (
-            <View className="items-center justify-center -mt-6">
-              {/* Outer glow */}
-              {focused && (
-                <View
-                  className="absolute w-20 h-20 rounded-full"
-                  style={{
-                    backgroundColor: 'rgba(212, 169, 84, 0.25)',
-                  }}
-                />
-              )}
+            <View style={styles.centerButtonContainer}>
+              {/* Outer glow ring */}
+              {focused && <View style={styles.centerButtonGlow} />}
               {/* Main button */}
-              <View
-                className={`w-14 h-14 rounded-full items-center justify-center border-2 ${
-                  focused
-                    ? 'bg-primary border-primary'
-                    : 'bg-surface-dark border-primary/50'
-                }`}
-                style={focused ? {
-                  shadowColor: GOLD,
-                  shadowOffset: { width: 0, height: 0 },
-                  shadowOpacity: 0.6,
-                  shadowRadius: 12,
-                  elevation: 10,
-                } : undefined}
-              >
+              <View style={[styles.centerButton, focused && styles.centerButtonActive]}>
                 {/* Inner orb */}
-                <View
-                  className={`w-5 h-5 rounded-full ${
-                    focused ? 'bg-background-dark' : 'bg-primary'
-                  }`}
-                />
+                <View style={[styles.centerButtonInner, focused && styles.centerButtonInnerActive]} />
               </View>
             </View>
           ),
@@ -110,7 +77,7 @@ export default function TabLayout() {
         options={{
           title: 'Progress',
           tabBarIcon: ({ color, focused }) => (
-            <View className={`p-2.5 rounded-2xl ${focused ? 'bg-primary/15' : ''}`}>
+            <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
               <BarChart2 size={24} color={color} strokeWidth={focused ? 2.5 : 1.5} />
             </View>
           ),
@@ -123,7 +90,7 @@ export default function TabLayout() {
         options={{
           title: 'Settings',
           tabBarIcon: ({ color, focused }) => (
-            <View className={`p-2.5 rounded-2xl ${focused ? 'bg-primary/15' : ''}`}>
+            <View style={[styles.iconWrapper, focused && styles.iconWrapperActive]}>
               <Settings size={24} color={color} strokeWidth={focused ? 2.5 : 1.5} />
             </View>
           ),
@@ -132,3 +99,77 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    position: 'absolute',
+    bottom: Platform.OS === 'ios' ? 34 : 20,
+    left: 20,
+    right: 20,
+    backgroundColor: COLORS.tabBar,
+    borderRadius: 32,
+    height: 64,
+    paddingBottom: 0,
+    paddingTop: 0,
+    borderTopWidth: 0,
+    borderWidth: 1,
+    borderColor: COLORS.tabBarBorder,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 20,
+  },
+  tabBarItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconWrapper: {
+    padding: 10,
+    borderRadius: 16,
+  },
+  iconWrapperActive: {
+    backgroundColor: COLORS.goldFaded,
+  },
+  centerButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: -24, // Raises the center button above the tab bar
+  },
+  centerButtonGlow: {
+    position: 'absolute',
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: COLORS.goldGlow,
+  },
+  centerButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.surface,
+    borderWidth: 2,
+    borderColor: 'rgba(212, 169, 84, 0.5)',
+  },
+  centerButtonActive: {
+    backgroundColor: COLORS.gold,
+    borderColor: COLORS.gold,
+    shadowColor: COLORS.gold,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 12,
+    elevation: 10,
+  },
+  centerButtonInner: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: COLORS.gold,
+  },
+  centerButtonInnerActive: {
+    backgroundColor: COLORS.background,
+  },
+});
